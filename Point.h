@@ -20,12 +20,12 @@ public:
  * @brief Funkcja ustawiajace skladowe wektora polozenia
  * @arg x, y to ustawiane skladowe polozenia
  */
-	void position(double x, double y);
+	void position(double x, double y, double z);
 /**
  * @brief Funkcja ustawiajace skladowe wektora predkosci
  * @arg x, y to ustawiane skladowe predkosci
  */
-	void velocity(double x, double y);
+	void velocity(double x, double y, double z);
 /**
  * @brief Funkcja zwracajaca wektor polozenia
  * @return zwraca referencje do wektora polozenia w klasie Point

@@ -3,7 +3,7 @@
 
 #include "Point.h"
 
-const double G = 6.67e-11;
+const double G = 1e-11;
 
 class PhysicsEngine{
 	double ts; //!< krok czasowy

@@ -3,12 +3,12 @@
 void Point::mass(double m){
 	masa = m;
 }
-void Point::position(double x, double y){
-	Vector a(x, y);
+void Point::position(double x, double y, double z){
+	Vector a(x, y, z);
 	pos = a;
 }
-void Point::velocity(double x, double y){
-	Vector a(x, y);
+void Point::velocity(double x, double y, double z){
+	Vector a(x, y, z);
 	vel = a;
 }
 
