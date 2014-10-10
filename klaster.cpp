@@ -44,9 +44,7 @@ void display() {
 
 void update(int value) {
 	engine2.step(tabela, liczbaPunktow);
-	std::cout << tabela[0].position().x() << "\t" << tabela[0].position().y()
-			<< "\t" << tabela[1].position().x() << "\t"
-			<< tabela[1].position().y() << std::endl;
+	std::cout << tabela[0].position().toString() << "\t\t" << tabela[1].position().toString() << std::endl;
 	glutPostRedisplay();
 	glutTimerFunc(25, update, 0);
 }
@@ -97,7 +95,7 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(50, 50); // Position the window's initial top-left corner
 
 	glutCreateWindow("Klaster atomowy"); // Create a window with the given title
-	engine2.timeStep(60 * 60 * 24);
+	engine2.timeStep(60 * 60 * 24*10);
 	glutDisplayFunc(display); // Register display callback handler for window re-paint
 	glutReshapeFunc(reshape);
 	glutTimerFunc(25, update, 0);

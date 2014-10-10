@@ -1,6 +1,8 @@
 #ifndef Vector_h
 #define Vector_h
 
+#include <string>
+
 class Vector {
 	double sklX; //!< skladowa x wektora
 	double sklY; //!< skladowa y wektora
@@ -46,6 +48,8 @@ public:
 	 * @return skladowa z wektora
 	 */
 	double z();
+
+	std::string toString();
 };
 
 #endif

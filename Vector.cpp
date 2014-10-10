@@ -1,4 +1,6 @@
 #include "Vector.h"
+#include <string>
+#include <sstream>
 
 Vector::Vector(double a, double b, double c){
 	sklX = a;
@@ -32,4 +34,11 @@ double Vector::y(){
 
 double Vector::z(){
 	return sklZ;
+}
+
+std::string Vector::toString(){
+	std::ostringstream strstream;
+	strstream << "x: " << sklX << "\t y: " << sklY << "\t z: " << sklZ;
+
+	return strstream.str();
 }
