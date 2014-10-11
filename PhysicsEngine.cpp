@@ -6,20 +6,23 @@ void PhysicsEngine::timeStep(double dt){
 	ts = dt;
 }
 
-void PhysicsEngine::step(Point* tab, int n){
-	Force force(0,0,0);
+void PhysicsEngine::step(Atom* tab, int n){
+	Force force;
 	for (int i = 0; i < n; i++){
+		force.setX(0.);
+		force.setY(0.);
+		force.setZ(0.);
 		for (int j = 0; j < n; j++)
 			if (&tab[i] != &tab[j]){
-				force.setX(gravity(tab[j], tab[i]).x());
-				force.setY(gravity(tab[j], tab[i]).y());
-				force.setZ(gravity(tab[j], tab[i]).z());
+				force.setX(force.x() + gravity(tab[j], tab[i]).x());
+				force.setY(force.y() + gravity(tab[j], tab[i]).y());
+				force.setZ(force.z() + gravity(tab[j], tab[i]).z());
 			}
 		step(tab[i], force);
 	}
 }
 
-void PhysicsEngine::step(Point& p, Force& f){
+void PhysicsEngine::step(Atom& p, Force& f){
 	totalTime += ts;
 
 	p.position().setX(p.position().x() + p.velocity().x() * ts + f.x() / p.mass() * ts * ts / 2.); // x2 = x1 + Vx*t + Fx/m*t^2/2 (a = F/m)
@@ -34,7 +37,7 @@ double PhysicsEngine::timeFromBeginning(){
 	return totalTime;
 }
 
-Force PhysicsEngine::gravity(Point& p1, Point& p2){
+Force PhysicsEngine::gravity(Atom& p1, Atom& p2){
 	Vector grav;
 	double r = sqrt(pow(p1.position().x() - p2.position().x(), 2) + pow(p1.position().y() - p2.position().y(), 2) + pow(p1.position().z() - p2.position().z(), 2)); // dlugosc wektora laczacego punkty
 

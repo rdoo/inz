@@ -1,11 +1,11 @@
-#ifndef Point_h
-#define Point_h
+#ifndef Atom_h
+#define Atom_h
 
 #include "Vector.h"
 
 typedef Vector Force;
 
-class Point{
+class Atom{
 	double masa;
 	Vector pos; //!< wektor polozenia
 	Vector vel; //!< wektor predkosci

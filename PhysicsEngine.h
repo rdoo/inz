@@ -1,7 +1,7 @@
 #ifndef PhysicsEngine_h
 #define PhysicsEngine_h
 
-#include "Point.h"
+#include "Atom.h"
 
 const double G = 1e-11;
 
@@ -19,12 +19,12 @@ public:
  * @brief Funkcja symulujaca zmiany wektora polozenia i predkosci
  * @arg p to punkt, ktorego polozenie i predkosc sa symulowane; f to sila jaka dziala na ten punkt
  */
-	void step(Point& p, Force& f);
+	void step(Atom& p, Force& f);
 /**
  * @brief Funkcja symulujaca zmiany wektora polozenia i predkosci danych punktów oddzialujacych grawitacyjnie
  * @arg tab to tablica punktow, ktorych polozenie i predkosc sa symulowane; n to liczba tych punktow
  */
-	void step(Point* tab, int n);
+	void step(Atom* tab, int n);
 /**
  * @brief Funkcja zwracajaca calkowity czas trwania symulacji
  * @return zwraca calkowity czas trwania symulacji
@@ -35,7 +35,7 @@ public:
  * @arg p1, p2 to punkty, dla ktorych sila jest liczona
  * @return zwraca wektor sily grawitacyjnej pomiedzy dwoma punktami
  */
-	Force gravity(Point& p1, Point& p2);
+	Force gravity(Atom& p1, Atom& p2);
 };
 
 
