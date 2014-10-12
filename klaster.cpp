@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
 
 	Atom atom2;
 	atom2.mass(1e-30);
-	atom2.position(1, 1, -1);
+	atom2.position(1, 1, -1.1);
 	atom2.velocity(0., 0., 0.);
 
 	atomTable[0] = atom1;
