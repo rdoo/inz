@@ -3,8 +3,6 @@
 
 #include "Vector.h"
 
-typedef Vector Force;
-
 class Atom{
 	double masa;
 	Vector pos; //!< wektor polozenia

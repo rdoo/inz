@@ -19,7 +19,7 @@ public:
  * @brief Funkcja symulujaca zmiany wektora polozenia i predkosci
  * @arg p to punkt, ktorego polozenie i predkosc sa symulowane; f to sila jaka dziala na ten punkt
  */
-	void step(Atom& p, Force& f);
+	void step(Atom& p, Vector& f);
 /**
  * @brief Funkcja symulujaca zmiany wektora polozenia i predkosci danych punktów oddzialujacych grawitacyjnie
  * @arg tab to tablica punktow, ktorych polozenie i predkosc sa symulowane; n to liczba tych punktow
@@ -35,7 +35,9 @@ public:
  * @arg p1, p2 to punkty, dla ktorych sila jest liczona
  * @return zwraca wektor sily grawitacyjnej pomiedzy dwoma punktami
  */
-	Force gravity(Atom& p1, Atom& p2);
+	Vector gravity(Atom& p1, Atom& p2);
+
+	Vector lennarda(Atom& p1, Atom& p2);
 };
 
 
