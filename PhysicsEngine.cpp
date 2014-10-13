@@ -1,8 +1,9 @@
 #include <cmath>
 #include <iostream>
+#include <gmp.h>
 #include "PhysicsEngine.h"
 
-void PhysicsEngine::timeStep(double dt){
+void PhysicsEngine::timeStep(long double dt){
 	ts = dt;
 }
 
@@ -15,7 +16,7 @@ void PhysicsEngine::step(Atom* tab, int n){
 		force.setZ(0.);
 		for (int j = 0; j < n; j++)
 			if (&tab[i] != &tab[j]){
-				len = lennarda(tab[j], tab[i]);
+				len = gravity(tab[j], tab[i]);
 				force.setX(force.x() + len.x());
 				force.setY(force.y() + len.y());
 				force.setZ(force.z() + len.z());
@@ -28,21 +29,21 @@ void PhysicsEngine::step(Atom* tab, int n){
 void PhysicsEngine::step(Atom& p, Vector& f){
 	totalTime += ts;
 
-	p.position().setX(p.position().x() + p.velocity().x() * ts + f.x() / p.mass() /** ts * ts*/ / 2.); // x2 = x1 + Vx*t + Fx/m*t^2/2 (a = F/m)
-	p.position().setY(p.position().y() + p.velocity().y() * ts + f.y() / p.mass() /** ts * ts*/ / 2.); // y2 = y1 + Vy*t + Fy/m*t^2/2 (a = F/m)
-	p.position().setZ(p.position().z() + p.velocity().z() * ts + f.z() / p.mass() /** ts * ts*/ / 2.); // z2 = z1 + Vz*t + Fz/m*t^2/2 (a = F/m)
+	p.position().setX(p.position().x() + p.velocity().x() * ts + f.x() / p.mass() * ts * ts / 2.); // x2 = x1 + Vx*t + Fx/m*t^2/2 (a = F/m)
+	p.position().setY(p.position().y() + p.velocity().y() * ts + f.y() / p.mass() * ts * ts / 2.); // y2 = y1 + Vy*t + Fy/m*t^2/2 (a = F/m)
+	p.position().setZ(p.position().z() + p.velocity().z() * ts + f.z() / p.mass() * ts * ts / 2.); // z2 = z1 + Vz*t + Fz/m*t^2/2 (a = F/m)
 	p.velocity().setX(p.velocity().x() + f.x() / p.mass() * ts); // Vx2 = Vx1 + Fx/m*t (a = F/m)
 	p.velocity().setY(p.velocity().y() + f.y() / p.mass() * ts); // Vy2 = Vy1 + Fy/m*t (a = F/m)
 	p.velocity().setZ(p.velocity().z() + f.z() / p.mass() * ts); // Vz2 = Vz1 + Fz/m*t (a = F/m)
 }
 
-double PhysicsEngine::timeFromBeginning(){
+long double PhysicsEngine::timeFromBeginning(){
 	return totalTime;
 }
 
 Vector PhysicsEngine::gravity(Atom& p1, Atom& p2){
 	Vector grav;
-	double r = sqrt(pow(p1.position().x() - p2.position().x(), 2) + pow(p1.position().y() - p2.position().y(), 2) + pow(p1.position().z() - p2.position().z(), 2)); // dlugosc wektora laczacego punkty
+	long double r = sqrt(pow(p1.position().x() - p2.position().x(), 2) + pow(p1.position().y() - p2.position().y(), 2) + pow(p1.position().z() - p2.position().z(), 2)); // dlugosc wektora laczacego punkty
 
 	grav.setX(G * p1.mass() * p2.mass() * (p1.position().x() - p2.position().x()) / r / r / r); // sila w polu grawitacyjnym
 	grav.setY(G * p1.mass() * p2.mass() * (p1.position().y() - p2.position().y()) / r / r / r);
@@ -53,8 +54,8 @@ Vector PhysicsEngine::gravity(Atom& p1, Atom& p2){
 
 Vector PhysicsEngine::lennarda(Atom& p1, Atom& p2){
 	Vector lenn;
-	double sigma = .1;
-	double r = sqrt(pow(p1.position().x() - p2.position().x(), 2) + pow(p1.position().y() - p2.position().y(), 2) + pow(p1.position().z() - p2.position().z(), 2)); // dlugosc wektora laczacego punkty
+	long double sigma = .1;
+	long double r = sqrt(pow(p1.position().x() - p2.position().x(), 2) + pow(p1.position().y() - p2.position().y(), 2) + pow(p1.position().z() - p2.position().z(), 2)); // dlugosc wektora laczacego punkty
 
 	std::cout << pow(p1.position().x() - p2.position().x(), 2) << std::endl;
 	std::cout << pow(p1.position().y() - p2.position().y(), 2) << std::endl;

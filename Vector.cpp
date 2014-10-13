@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 
-Vector::Vector(double a, double b, double c){
+Vector::Vector(long double a, long double b, long double c){
 	sklX = a;
 	sklY = b;
 	sklZ = c;
@@ -14,25 +14,25 @@ Vector::Vector(){
 	sklZ = 0.;
 }
 
-void Vector::setX(double a){
+void Vector::setX(long double a){
 	sklX = a;
 }
-void Vector::setY(double b){
+void Vector::setY(long double b){
 	sklY = b;
 }
-void Vector::setZ(double c){
+void Vector::setZ(long double c){
 	sklZ = c;
 }
 
-double Vector::x(){
+long double Vector::x(){
 	return sklX;
 }
 
-double Vector::y(){
+long double Vector::y(){
 	return sklY;
 }
 
-double Vector::z(){
+long double Vector::z(){
 	return sklZ;
 }
 

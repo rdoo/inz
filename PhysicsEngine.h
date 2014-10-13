@@ -3,18 +3,18 @@
 
 #include "Atom.h"
 
-const double G = 1e-11;
+const long double G = 1e-11;
 
 class PhysicsEngine{
-	double ts; //!< krok czasowy
-	double totalTime = 0.; //!< calkowity czas symulacji
+	long double ts; //!< krok czasowy
+	long double totalTime = 0.; //!< calkowity czas symulacji
 
 public:
 /**
  * @brief Funkcja ustawiajaca krok czasowy
  * @arg dt to krok czasowy
  */
-	void timeStep(double dt);
+	void timeStep(long double dt);
 /**
  * @brief Funkcja symulujaca zmiany wektora polozenia i predkosci
  * @arg p to punkt, ktorego polozenie i predkosc sa symulowane; f to sila jaka dziala na ten punkt
@@ -29,7 +29,7 @@ public:
  * @brief Funkcja zwracajaca calkowity czas trwania symulacji
  * @return zwraca calkowity czas trwania symulacji
  */
-	double timeFromBeginning();
+	long double timeFromBeginning();
 /**
  * @brief Funkcja zwracajaca wektor sily grawitacyjnej pomiedzy dwoma punktami
  * @arg p1, p2 to punkty, dla ktorych sila jest liczona

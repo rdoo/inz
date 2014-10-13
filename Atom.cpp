@@ -1,13 +1,13 @@
 #include "Atom.h"
 
-void Atom::mass(double m){
+void Atom::mass(long double m){
 	masa = m;
 }
-void Atom::position(double x, double y, double z){
+void Atom::position(long double x, long double y, long double z){
 	Vector a(x, y, z);
 	pos = a;
 }
-void Atom::velocity(double x, double y, double z){
+void Atom::velocity(long double x, long double y, long double z){
 	Vector a(x, y, z);
 	vel = a;
 }
@@ -20,6 +20,6 @@ Vector& Atom::velocity(){
 	return vel;
 }
 
-double Atom::mass(){
+long double Atom::mass(){
 	return masa;
 }

@@ -4,7 +4,7 @@
 #include "Vector.h"
 
 class Atom{
-	double masa;
+	long double masa;
 	Vector pos; //!< wektor polozenia
 	Vector vel; //!< wektor predkosci
 	
@@ -13,17 +13,17 @@ public:
  * @brief Funkcja ustawiajaca mase
  * @arg m to ustawiana masa
  */
-	void mass(double m);
+	void mass(long double m);
 /**
  * @brief Funkcja ustawiajace skladowe wektora polozenia
  * @arg x, y to ustawiane skladowe polozenia
  */
-	void position(double x, double y, double z);
+	void position(long double x, long double y, long double z);
 /**
  * @brief Funkcja ustawiajace skladowe wektora predkosci
  * @arg x, y to ustawiane skladowe predkosci
  */
-	void velocity(double x, double y, double z);
+	void velocity(long double x, long double y, long double z);
 /**
  * @brief Funkcja zwracajaca wektor polozenia
  * @return zwraca referencje do wektora polozenia w klasie Point
@@ -38,7 +38,7 @@ public:
  * @brief Funkcja zwracajaca mase
  * @return zwraca wartosc masy w klasie Point
  */
-	double mass();
+	long double mass();
 };
 
 
