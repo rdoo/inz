@@ -7,7 +7,7 @@
 
 PhysicsEngine engine;
 
-int numberOfAtoms = 2;
+int numberOfAtoms = 5;
 Atom* atomTable = new Atom[numberOfAtoms];
 
 void displayAtom(int atomNumber){
@@ -77,17 +77,34 @@ int main(int argc, char** argv) {
 
 	Atom atom1;
 	atom1.mass(2e-26);
-	atom1.position(-2e-10L*0.9, 0, -1e-9);
+	atom1.position(-2e-10L*0.5, 0, -1e-9);
 	atom1.velocity(0.0, 0.0, 0.);
 
 	Atom atom2;
 	atom2.mass(2e-26);
-	atom2.position(2e-10L*0.9, 0, -1e-9);
+	atom2.position(2e-10L*0.5, 0, -1e-9);
 	atom2.velocity(0., 0., 0.);
+
+	Atom atom3;
+	atom3.mass(2e-26);
+	atom3.position(0., -3e-10L, -1e-9);
+	atom3.velocity(0.0, 0.0, 0.);
+
+	Atom atom4;
+	atom4.mass(2e-26);
+	atom4.position(-3e-10L, -3e-10L, -1e-9);
+	atom4.velocity(0.0, 0.0, 0.);
+
+	Atom atom5;
+	atom5.mass(2e-26);
+	atom5.position(2e-10L, 2e-10L, -1e-9);
+	atom5.velocity(0.0, 0.0, 0.);
 
 	atomTable[0] = atom1;
 	atomTable[1] = atom2;
-	//atomTable[2] = atom3;
+	atomTable[2] = atom3;
+	atomTable[3] = atom4;
+	atomTable[4] = atom5;
 
 	glutInit(&argc, argv);                 // Initialize GLUT
 

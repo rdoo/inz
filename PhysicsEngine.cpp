@@ -55,18 +55,18 @@ Vector PhysicsEngine::gravity(Atom& p1, Atom& p2){
 
 Vector PhysicsEngine::lennarda(Atom& p1, Atom& p2){
 	Vector lenn;
-	long double slow = 0.001L;
+	long double slow = 0.0001L;
 	long double sigma = 3e-10L;
 	long double dx = powl(p1.position().x() - p2.position().x(), 2);
 	long double dy = powl(p1.position().y() - p2.position().y(), 2);
 	long double dz = powl(p1.position().z() - p2.position().z(), 2);
 	long double r = sqrtl(dx + dy + dz); // dlugosc wektora laczacego punkty
-
+/*
 	std::cout << (double)dx << std::endl;
 	std::cout << (double)dy << std::endl;
 	std::cout << (double)dz << std::endl;
 	std::cout << (double)r << std::endl;
-
+*/
 	lenn.setX(-4 * slow * p1.mass() * sigma * sigma * (powl(sigma / r , 12) - powl(sigma / r , 6)) * (p1.position().x() - p2.position().x()) / r / r);
 	lenn.setY(-4 * slow * p1.mass() * sigma * sigma * (powl(sigma / r , 12) - powl(sigma / r , 6)) * (p1.position().y() - p2.position().y()) / r / r);
 	lenn.setZ(-4 * slow * p1.mass() * sigma * sigma * (powl(sigma / r , 12) - powl(sigma / r , 6)) * (p1.position().z() - p2.position().z()) / r / r);
