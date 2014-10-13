@@ -38,7 +38,7 @@ long double Vector::z(){
 
 std::string Vector::toString(){
 	std::ostringstream strstream;
-	strstream << "x: " << sklX << "\t y: " << sklY << "\t z: " << sklZ;
+	strstream << "x: " << (double)sklX << "\t y: " << (double)sklY << "\t z: " << (double)sklZ;
 
 	return strstream.str();
 }

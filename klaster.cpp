@@ -7,14 +7,14 @@
 
 PhysicsEngine engine;
 
-int numberOfAtoms = 3;
+int numberOfAtoms = 2;
 Atom* atomTable = new Atom[numberOfAtoms];
 
 void displayAtom(int atomNumber){
 	glLoadIdentity();
 	glTranslatef(atomTable[atomNumber].position().x(), atomTable[atomNumber].position().y(), atomTable[atomNumber].position().z());
-	glColor3f(224 / 255.0f, 224 / 255.0f, 224 / 255.0f);
-	glutWireSphere(50, 10, 10);
+	glColor3f(224 / 255.0f, 224 / 255.0f, 100 * atomNumber / 255.0f);
+	glutWireSphere(.0000000001*1, 10, 10);
 }
 
 /* Handler for window-repaint event. Call back when the window first appears and
@@ -53,12 +53,12 @@ void reshape(GLsizei width, GLsizei height) { // GLsizei for non-negative intege
 	glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
 	glLoadIdentity();             // Reset
 	// Enable perspective projection with fovy, aspect, zNear and zFar
-	gluPerspective(45.0f, aspect, 0.1f, 10000.0f);
+	gluPerspective(45.0f, aspect, 1e-10, 1e-8f);
 }
 
 int main(int argc, char** argv) {
 	std::cout << "Hello inzynierko!" << std::endl;
-
+/*
 	Atom atom1;
 	atom1.mass(10);
 	atom1.position(1e2, 1e2, -1700);
@@ -73,21 +73,21 @@ int main(int argc, char** argv) {
 	atom3.mass(10);
 	atom3.position(-1e2, -1e2, -2300);
 	atom3.velocity(-0.000005, -0.000005, 0.);
+*/
 
-/*
 	Atom atom1;
-	atom1.mass(1e-30);
-	atom1.position(0, 0, -1);
+	atom1.mass(2e-26);
+	atom1.position(-2e-10L*0.9, 0, -1e-9);
 	atom1.velocity(0.0, 0.0, 0.);
 
 	Atom atom2;
-	atom2.mass(1e-30);
-	atom2.position(100, 100, -1.1);
+	atom2.mass(2e-26);
+	atom2.position(2e-10L*0.9, 0, -1e-9);
 	atom2.velocity(0., 0., 0.);
-*/
+
 	atomTable[0] = atom1;
 	atomTable[1] = atom2;
-	atomTable[2] = atom3;
+	//atomTable[2] = atom3;
 
 	glutInit(&argc, argv);                 // Initialize GLUT
 
@@ -96,8 +96,8 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(50, 50); // Position the window's initial top-left corner
 
 	glutCreateWindow("Klaster atomowy"); // Create a window with the given title
-	engine.timeStep(60 * 60 * 24*10);
-	//engine.timeStep(0.0001);
+	//engine.timeStep(60 * 60 * 24*10);
+	engine.timeStep(0.0000000000000000000000001L);
 	glutDisplayFunc(display); // Register display callback handler for window re-paint
 	glutReshapeFunc(reshape);
 	glutTimerFunc(25, update, 0);
