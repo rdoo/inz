@@ -17,7 +17,7 @@ PhysicsEngine engine;
 Algorithm algo;
 CCamera objCamera;
 
-int numberOfAtoms = 5;
+int numberOfAtoms = 15;
 Atom* atomTable = new Atom[numberOfAtoms];
 
 double powe = 100000000000;
@@ -122,7 +122,7 @@ void Keyboard_Input()
 
 void Draw_Grid()
 {
-
+/*
 	for(float i = -500; i <= 500; i += 5)
 	{
 		glBegin(GL_LINES);
@@ -133,6 +133,7 @@ void Draw_Grid()
 			glVertex3f(i, 0, 500);
 		glEnd();
 	}
+	*/
 }
 
 void Mouse_Button(int button, int state, int x, int y){
@@ -154,20 +155,45 @@ void Mouse_Button(int button, int state, int x, int y){
 int main(int argc, char** argv) {
 	std::cout << "Hello inzynierko!" << std::endl;
 	srand(time(NULL));
+	/*
+		Atom atom1;
+		atom1.mass(2e-26);
+		atom1.position(0, 0, -1e-9);
+		atom1.velocity(0.0, 0.0, 0.);
 
+		Atom atom2;
+		atom2.mass(2e-26);
+		atom2.position(0, 0, -0.01);
+		atom2.velocity(0., 0., 0.);
+
+		Atom atom3;
+		atom3.mass(2e-26);
+		atom3.position(0., -0.01, -1e-9);
+		atom3.velocity(0.0, 0.0, 0.);
+
+		Atom atom4;
+		atom4.mass(2e-26);
+		atom4.position(-1, -0.5, -1e-9);
+		atom4.velocity(0.0, 0.0, 0.);
+
+		Atom atom5;
+		atom5.mass(2e-26);
+		atom5.position(-10, 2e-10L, -1e-9);
+		atom5.velocity(0.0, 0.0, 0.);
+	*/
 	Atom atom1;
 	atom1.mass(2e-26);
-	atom1.position(-2e-10L*0.5, 0, 0);
+	atom1.position(-1e-10L, 0, 0);
 	atom1.velocity(0.0, 0.0, 0.);
 
 	Atom atom2;
 	atom2.mass(2e-26);
-	atom2.position(2e-10L*0.5, 0, -1e-10);
+	atom2.position(1e-10L, 0, -1e-10);
 	atom2.velocity(0., 0., 0.);
 
 	Atom atom3;
 	atom3.mass(2e-26);
-	atom3.position(0., -3e-10L, 0);
+	atom3.position(0., -3e-10L, -1e-10);
 	atom3.velocity(0.0, 0.0, 0.);
 
 	Atom atom4;
@@ -177,40 +203,75 @@ int main(int argc, char** argv) {
 
 	Atom atom5;
 	atom5.mass(2e-26);
-	atom5.position(2e-10L*0.5, 0, 1e-10);
+	atom5.position(2e-10L, 0, 1e-10);
 	atom5.velocity(0.0, 0.0, 0.);
 
-/*
-	Atom atom1;
-	atom1.mass(2e-26);
-	atom1.position(0, 0, -1e-9);
-	atom1.velocity(0.0, 0.0, 0.);
+	Atom atom6;
+	atom6.mass(2e-26);
+	atom6.position(1e-10L, -2e-10L, 1e-10);
+	atom6.velocity(0.0, 0.0, 0.);
 
-	Atom atom2;
-	atom2.mass(2e-26);
-	atom2.position(0, 0, -0.01);
-	atom2.velocity(0., 0., 0.);
+	Atom atom7;
+	atom7.mass(2e-26);
+	atom7.position(1.e-10, 1e-10L, 0.);
+	atom7.velocity(0.0, 0.0, 0.);
 
-	Atom atom3;
-	atom3.mass(2e-26);
-	atom3.position(0., -0.01, -1e-9);
-	atom3.velocity(0.0, 0.0, 0.);
+	Atom atom8;
+	atom8.mass(2e-26);
+	atom8.position(2e-10L, -2e-10L, 0);
+	atom8.velocity(0.0, 0.0, 0.);
 
-	Atom atom4;
-	atom4.mass(2e-26);
-	atom4.position(-1, -0.5, -1e-9);
-	atom4.velocity(0.0, 0.0, 0.);
+	Atom atom9;
+	atom9.mass(2e-26);
+	atom9.position(1e-10L, -2e-10L, 0);
+	atom9.velocity(0.0, 0.0, 0.);
 
-	Atom atom5;
-	atom5.mass(2e-26);
-	atom5.position(-10, 2e-10L, -1e-9);
-	atom5.velocity(0.0, 0.0, 0.);
-*/
+	Atom atom10;
+	atom10.mass(2e-26);
+	atom10.position(2e-10L, -2e-10L, -1e-10L);
+	atom10.velocity(0.0, 0.0, 0.);
+
+	Atom atom11;
+	atom11.mass(2e-26);
+	atom11.position(1e-10L, 1e-10L, 0);
+	atom11.velocity(0.0, 0.0, 0.);
+
+	Atom atom12;
+	atom12.mass(2e-26);
+	atom12.position(1e-10L, 2e-10L, -1e-10L);
+	atom12.velocity(0.0, 0.0, 0.);
+
+	Atom atom13;
+	atom13.mass(2e-26);
+	atom13.position(1e-10L, -1e-10L, 1e-10L);
+	atom13.velocity(0.0, 0.0, 0.);
+
+	Atom atom14;
+	atom14.mass(2e-26);
+	atom14.position(-1e-10L, -1e-10L, -1e-10L);
+	atom14.velocity(0.0, 0.0, 0.);
+
+	Atom atom15;
+	atom15.mass(2e-26);
+	atom15.position(-1e-10L, 1e-10L, 1e-10L);
+	atom15.velocity(0.0, 0.0, 0.);
+
+
 	atomTable[0] = atom1;
 	atomTable[1] = atom2;
 	atomTable[2] = atom3;
 	atomTable[3] = atom4;
 	atomTable[4] = atom5;
+	atomTable[5] = atom6;
+	atomTable[6] = atom7;
+	atomTable[7] = atom8;
+	atomTable[8] = atom9;
+	atomTable[9] = atom10;
+	atomTable[10] = atom11;
+	atomTable[11] = atom12;
+	atomTable[12] = atom13;
+	atomTable[13] = atom14;
+	atomTable[14] = atom15;
 
 	glutInit(&argc, argv);                 // Initialize GLUT
 
