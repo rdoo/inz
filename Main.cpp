@@ -63,9 +63,9 @@ void display() {
 }
 
 void update(int value) {
-	engine.step(atomTable, numberOfAtoms);
-	//algo.step(atomTable, numberOfAtoms);
-	std::cout << atomTable[0].position().toString() << "\t\t" << atomTable[1].position().toString() << std::endl;
+	//engine.step(atomTable, numberOfAtoms);
+	algo.step(atomTable, numberOfAtoms);
+	std::cout << atomTable[0].position() << "\t\t" << atomTable[1].position() << std::endl;
 	//std::cout << objCamera.isDragging << "\t\t" << std::endl;
 	glutPostRedisplay();
 	glutTimerFunc(25, update, 0);

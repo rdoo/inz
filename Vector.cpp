@@ -1,7 +1,5 @@
 #include "Vector.h"
 #include <math.h>
-#include <string>
-#include <sstream>
 
 Vector::Vector(long double x, long double y, long double z) {
 	m_x = x;
@@ -44,14 +42,6 @@ long double Vector::distanceFromVector(Vector v) {
 			powl(m_x - v.m_x, 2) + powl(m_y - v.m_y, 2) + powl(m_z - v.m_z, 2));
 }
 
-std::string Vector::toString() {
-	std::ostringstream strstream;
-	strstream << "x: " << (double) m_x << "\t y: " << (double) m_y << "\t z: "
-			<< (double) m_z;
-
-	return strstream.str();
-}
-
 Vector Vector::operator+(Vector v) {
 	return Vector(m_x + v.m_x, m_y + v.m_y, m_z + v.m_z);
 }
@@ -66,4 +56,10 @@ Vector Vector::operator*(long double number) {
 
 Vector Vector::operator/(long double number) {
 	return Vector(m_x / number, m_y / number, m_z / number);
+}
+
+std::ostream& operator<<(std::ostream& os, const Vector& v) {
+	os << "x: " << (double) v.m_x << "\t y: " << (double) v.m_y << "\t z: "
+			<< (double) v.m_z;
+	return os;
 }

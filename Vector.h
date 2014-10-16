@@ -1,7 +1,7 @@
 #ifndef Vector_h
 #define Vector_h
 
-#include <string>
+#include <iostream>
 
 class Vector {
 	long double m_x; //!< skladowa x wektora
@@ -51,8 +51,6 @@ public:
 
 	long double distanceFromVector(Vector v);
 
-	std::string toString();
-
 	// overload + operator
 	Vector operator+(Vector v);
 	// overload - operator
@@ -61,6 +59,8 @@ public:
 	Vector operator*(long double number);
 	// overload / operator
 	Vector operator/(long double number);
+
+	friend std::ostream& operator<<(std::ostream& os, const Vector& dt);
 };
 
 #endif
