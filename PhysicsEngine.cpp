@@ -19,9 +19,7 @@ void PhysicsEngine::step(Atom* tab, int n){
 			if (&tab[i] != &tab[j]){
 				len = lennarda(tab[j], tab[i]);
 				force = force + len;
-				/*force.setX(force.x() + len.x());
-				force.setY(force.y() + len.y());
-				force.setZ(force.z() + len.z());*/
+
 				//std::cout << "force: " << force.toString() << std::endl;
 			}
 		step(tab[i], force);
@@ -56,12 +54,9 @@ Vector PhysicsEngine::gravity(Atom& p1, Atom& p2){
 
 Vector PhysicsEngine::lennarda(Atom& p1, Atom& p2){
 	Vector lenn;
-	long double slow = 0.0001L;
+	long double slow = 0.00001L;
 	long double sigma = 3e-10L;
-	long double dx = powl(p1.position().x() - p2.position().x(), 2);
-	long double dy = powl(p1.position().y() - p2.position().y(), 2);
-	long double dz = powl(p1.position().z() - p2.position().z(), 2);
-	long double r = sqrtl(dx + dy + dz); // dlugosc wektora laczacego punkty
+	long double r = p1.position().distanceFromVector(p2.position()); // dlugosc wektora laczacego punkty
 /*
 	std::cout << (double)dx << std::endl;
 	std::cout << (double)dy << std::endl;

@@ -1,4 +1,5 @@
 #include "Vector.h"
+#include <math.h>
 #include <string>
 #include <sstream>
 
@@ -36,6 +37,11 @@ long double Vector::y() {
 
 long double Vector::z() {
 	return m_z;
+}
+
+long double Vector::distanceFromVector(Vector v) {
+	return sqrtl(
+			powl(m_x - v.m_x, 2) + powl(m_y - v.m_y, 2) + powl(m_z - v.m_z, 2));
 }
 
 std::string Vector::toString() {

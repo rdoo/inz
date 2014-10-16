@@ -49,6 +49,8 @@ public:
 	 */
 	long double z();
 
+	long double distanceFromVector(Vector v);
+
 	std::string toString();
 
 	// overload + operator
