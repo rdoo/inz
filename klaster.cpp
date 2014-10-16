@@ -1,14 +1,20 @@
 #include <iostream>
 #include "PhysicsEngine.h"
+#include "Algorithm.h"
 #include <windows.h>
 #include <GL/glut.h>
 #include "Atom.h"
 #include <gmp.h>
 #include <math.h>
+#include <time.h>
 
 #include "Camera.h"
 
+void displayAtom(int atomNumber);
+void display();
+
 PhysicsEngine engine;
+Algorithm algo;
 CCamera objCamera;
 
 int numberOfAtoms = 5;
@@ -57,7 +63,8 @@ void display() {
 }
 
 void update(int value) {
-	engine.step(atomTable, numberOfAtoms);
+	//engine.step(atomTable, numberOfAtoms);
+	algo.step(atomTable, numberOfAtoms);
 	std::cout << atomTable[0].position().toString() << "\t\t" << atomTable[1].position().toString() << std::endl;
 	//std::cout << objCamera.isDragging << "\t\t" << std::endl;
 	glutPostRedisplay();
@@ -146,22 +153,7 @@ void Mouse_Button(int button, int state, int x, int y){
 
 int main(int argc, char** argv) {
 	std::cout << "Hello inzynierko!" << std::endl;
-/*
-	Atom atom1;
-	atom1.mass(10);
-	atom1.position(1e2, 1e2, -1700);
-	atom1.velocity(-0.000005, 0.000005, 0.);
-
-	Atom atom2;
-	atom2.mass(2e3);
-	atom2.position(-1e2, -1e2, -2000);
-	atom2.velocity(0., 0., 0.);
-
-	Atom atom3;
-	atom3.mass(10);
-	atom3.position(-1e2, -1e2, -2300);
-	atom3.velocity(-0.000005, -0.000005, 0.);
-*/
+	srand(time(NULL));
 
 	Atom atom1;
 	atom1.mass(2e-26);
