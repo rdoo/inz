@@ -15,12 +15,52 @@ void display();
 
 PhysicsEngine engine;
 Algorithm algo;
-CCamera objCamera;
+Camera objCamera;
 
 int numberOfAtoms = 15;
 Atom* atomTable = new Atom[numberOfAtoms];
 
 double powe = 100000000000;
+
+void Keyboard_Input()
+{
+	if((GetKeyState(VK_UP) & 0x80) || (GetKeyState('W') & 0x80))
+	{
+		objCamera.moveCamera(CAMERASPEED);
+	}
+
+	if((GetKeyState(VK_DOWN) & 0x80) || (GetKeyState('S') & 0x80))
+	{
+		objCamera.moveCamera(-CAMERASPEED);
+	}
+
+	if((GetKeyState(VK_LEFT) & 0x80) || (GetKeyState('A') & 0x80))
+	{
+		objCamera.strafeCamera(-CAMERASPEED);
+	}
+
+	if((GetKeyState(VK_RIGHT) & 0x80) || (GetKeyState('D') & 0x80))
+	{
+		objCamera.strafeCamera(CAMERASPEED);
+	}
+}
+
+
+void Draw_Grid()
+{
+/*
+	for(float i = -500; i <= 500; i += 5)
+	{
+		glBegin(GL_LINES);
+			glColor3ub(150, 190, 150);
+			glVertex3f(-500, 0, i);
+			glVertex3f(500, 0, i);
+			glVertex3f(i, 0,-500);
+			glVertex3f(i, 0, 500);
+		glEnd();
+	}
+	*/
+}
 
 void displayAtom(int atomNumber){
 	//glLoadIdentity();
@@ -51,7 +91,7 @@ void display() {
 
 	Keyboard_Input();
 	if (objCamera.isDragging)
-	objCamera.Mouse_Move(640,640);
+	objCamera.mouseMove(640,640);
 
 	for (int i = 0; i < numberOfAtoms; i++){
 		//glPushMatrix();
@@ -94,46 +134,6 @@ void reshape(GLsizei width, GLsizei height) { // GLsizei for non-negative intege
 	// Set the viewport to cover the new window
 	//glViewport(0, 0, width, height);
 
-}
-
-void Keyboard_Input()
-{
-	if((GetKeyState(VK_UP) & 0x80) || (GetKeyState('W') & 0x80))
-	{
-		objCamera.Move_Camera( CAMERASPEED);
-	}
-
-	if((GetKeyState(VK_DOWN) & 0x80) || (GetKeyState('S') & 0x80))
-	{
-		objCamera.Move_Camera(-CAMERASPEED);
-	}
-
-	if((GetKeyState(VK_LEFT) & 0x80) || (GetKeyState('A') & 0x80))
-	{
-		objCamera.Strafe_Camera(-CAMERASPEED);
-	}
-
-	if((GetKeyState(VK_RIGHT) & 0x80) || (GetKeyState('D') & 0x80))
-	{
-		objCamera.Strafe_Camera( CAMERASPEED);
-	}
-}
-
-
-void Draw_Grid()
-{
-/*
-	for(float i = -500; i <= 500; i += 5)
-	{
-		glBegin(GL_LINES);
-			glColor3ub(150, 190, 150);
-			glVertex3f(-500, 0, i);
-			glVertex3f(500, 0, i);
-			glVertex3f(i, 0,-500);
-			glVertex3f(i, 0, 500);
-		glEnd();
-	}
-	*/
 }
 
 void Mouse_Button(int button, int state, int x, int y){
@@ -283,7 +283,7 @@ int main(int argc, char** argv) {
 	//engine.timeStep(60 * 60 * 24*10);
 	engine.timeStep(0.0000000000000000000000001L);
 
-	objCamera.Position_Camera(0, 0, 0,	0, 0, -1,   0, 0.1, 0);
+	objCamera.positionCamera(0, 0, 0,	0, 0, -1,   0, 0.1, 0);
 
 	glutDisplayFunc(display); // Register display callback handler for window re-paint
 	glutReshapeFunc(reshape);
