@@ -59,11 +59,11 @@ void Draw_Grid()
 
 void displayAtom(int atomNumber){
 	//glLoadIdentity();
-	glColor3f(224 / 255.0f, 224 / 255.0f, 100 * atomNumber / 255.0f);
+	glColor3f(224 / 255.0f, 224 / 255.0f, 200 / 255.0f);
 	glPushMatrix();
 
 	glTranslatef(atomTable[atomNumber].position().x(), atomTable[atomNumber].position().y(), atomTable[atomNumber].position().z());
-	glutWireSphere(.0000000001*1, 10, 10);
+	glutWireSphere(.0000000001*0.7, 10, 10);
 	glPopMatrix();
 }
 
@@ -106,28 +106,20 @@ void update(int value) {
 	glutTimerFunc(25, update, 0);
 }
 
-void reshape(GLsizei width, GLsizei height) { // GLsizei for non-negative integer
-
+void reshape(GLsizei width, GLsizei height) {
 	// Compute aspect ratio of the new window
 	if (height == 0)
 		height = 1;                // To prevent divide by 0
-	//GLfloat aspect = (GLfloat) width / (GLfloat) height; // TODO: uzyc tego jakos
 
-	// Set the aspect ratio of the clipping volume to match the viewport
-	glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
-	glLoadIdentity();             // Reset
-	// Enable perspective projection with fovy, aspect, zNear and zFar
-	//gluPerspective(45.0f, aspect, 0.0f, 1000.f);
-
-	glOrtho(-100, 100, -100, 100, -100, 100);
-
-
-	//glMatrixMode(GL_MODELVIEW);
-
-	//glLoadIdentity();
+	GLfloat aspect = (GLfloat) width / (GLfloat) height;
 
 	// Set the viewport to cover the new window
-	//glViewport(0, 0, width, height);
+	glViewport(0, 0, width, height);
+
+	glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
+	glLoadIdentity();             // Reset
+
+	glOrtho(-100 * aspect, 100 * aspect, -100, 100, -100, 100);
 
 }
 
