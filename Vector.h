@@ -4,16 +4,16 @@
 #include <string>
 
 class Vector {
-	long double sklX; //!< skladowa x wektora
-	long double sklY; //!< skladowa y wektora
-	long double sklZ; //!< skladowa z wektora
+	long double m_x; //!< skladowa x wektora
+	long double m_y; //!< skladowa y wektora
+	long double m_z; //!< skladowa z wektora
 
 public:
 	/**
 	 * @brief Konstruktor tworzacy instancje klasy Vector z dwoma argumentami
 	 * @arg a, b to poczatkowe skladowe wektora
 	 */
-	Vector(long double a, long double b, long double c);
+	Vector(long double x, long double y, long double z);
 	/**
 	 * @brief Konstruktor tworzacy instancje klasy Vector ze skladowymi ustawianymi na 0.
 	 */
@@ -22,17 +22,17 @@ public:
 	 * @brief Funkcja ustawiajaca skladowa x wektora
 	 * @arg a to ustawiana skladowa x wektora
 	 */
-	void setX(long double a);
+	void setX(long double x);
 	/**
 	 * @brief Funkcja ustawiajaca skladowa y wektora
 	 * @arg b to ustawiana skladowa y wektora
 	 */
-	void setY(long double b);
+	void setY(long double y);
 	/**
 	 * @brief Funkcja ustawiajaca skladowa z wektora
 	 * @arg b to ustawiana skladowa z wektora
 	 */
-	void setZ(long double c);
+	void setZ(long double z);
 	/**
 	 * @brief Funkcja zwracajaca skladowa x wektora
 	 * @return skladowa x wektora
@@ -50,6 +50,15 @@ public:
 	long double z();
 
 	std::string toString();
+
+	// overload + operator
+	Vector operator+(Vector v);
+	// overload - operator
+	Vector operator-(Vector v);
+	// overload * operator
+	Vector operator*(long double number);
+	// overload / operator
+	Vector operator/(long double number);
 };
 
 #endif

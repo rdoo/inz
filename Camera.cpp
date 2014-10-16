@@ -16,9 +16,9 @@ void CCamera::Position_Camera(float pos_x,  float pos_y,  float pos_z,
 							  float view_x, float view_y, float view_z,
 							  float up_x,   float up_y,   float up_z)
 {
-	mPos	= tVector3(pos_x,  pos_y,  pos_z ); // set position
-	mView	= tVector3(view_x, view_y, view_z); // set view
-	mUp		= tVector3(up_x,   up_y,   up_z  ); // set the up vector	
+	mPos	= Vector(pos_x,  pos_y,  pos_z ); // set position
+	mView	= Vector(view_x, view_y, view_z); // set view
+	mUp		= Vector(up_x,   up_y,   up_z  ); // set the up vector
 }
 
 
@@ -28,13 +28,13 @@ void CCamera::Position_Camera(float pos_x,  float pos_y,  float pos_z,
 void CCamera::Move_Camera(float speed)
 {
 	double spowolnienie = 1000000000.;
-	tVector3 vVector = mView - mPos;	// Get the view vector
+	Vector vVector = mView - mPos;	// Get the view vector
 	
 	// forward positive cameraspeed and backward negative -cameraspeed.
-	mPos.x  = mPos.x  + vVector.x * speed / spowolnienie;
-	mPos.z  = mPos.z  + vVector.z * speed / spowolnienie;
-	mView.x = mView.x + vVector.x * speed / spowolnienie;
-	mView.z = mView.z + vVector.z * speed / spowolnienie;
+	mPos.setX(mPos.x()  + vVector.x() * speed / spowolnienie);
+	mPos.setZ(mPos.z()  + vVector.z() * speed / spowolnienie);
+	mView.setX(mView.x() + vVector.x() * speed / spowolnienie);
+	mView.setZ(mView.z() + vVector.z() * speed / spowolnienie);
 }
 
 
@@ -43,10 +43,10 @@ void CCamera::Move_Camera(float speed)
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void CCamera::Rotate_View(float speed)
 {
-	tVector3 vVector = mView - mPos;	// Get the view vector
+	Vector vVector = mView - mPos;	// Get the view vector
 
-	mView.z = (float)(mPos.z + sin(speed)*vVector.x + cos(speed)*vVector.z);
-	mView.x = (float)(mPos.x + cos(speed)*vVector.x - sin(speed)*vVector.z);
+	mView.setZ(mPos.z() + sin(speed)*vVector.x() + cos(speed)*vVector.z());
+	mView.setX(mPos.x() + cos(speed)*vVector.x() - sin(speed)*vVector.z());
 }
 
 
@@ -58,17 +58,17 @@ void CCamera::Rotate_View(float speed)
 void CCamera::Strafe_Camera(float speed)
 {
 	double spowolnienie = 1000000000.;
-	tVector3 vVector = mView - mPos;	// Get the view vector
-	tVector3 vOrthoVector;              // Orthogonal vector for the view vector
+	Vector vVector = mView - mPos;	// Get the view vector
+	Vector vOrthoVector;              // Orthogonal vector for the view vector
 
-	vOrthoVector.x = -vVector.z;
-	vOrthoVector.z =  vVector.x;
+	vOrthoVector.setX(-vVector.z());
+	vOrthoVector.setZ(vVector.x());
 
 	// left positive cameraspeed and right negative -cameraspeed.
-	mPos.x  = mPos.x  + vOrthoVector.x * speed / spowolnienie;
-	mPos.z  = mPos.z  + vOrthoVector.z * speed / spowolnienie;
-	mView.x = mView.x + vOrthoVector.x * speed / spowolnienie;
-	mView.z = mView.z + vOrthoVector.z * speed / spowolnienie;
+	mPos.setX(mPos.x()  + vOrthoVector.x() * speed / spowolnienie);
+	mPos.setZ(mPos.z()  + vOrthoVector.z() * speed / spowolnienie);
+	mView.setX(mView.x() + vOrthoVector.x() * speed / spowolnienie);
+	mView.setZ(mView.z() + vOrthoVector.z() * speed / spowolnienie);
 }
 
 //NEW//////////////////NEW//////////////////NEW//////////////////NEW////////////////
@@ -112,11 +112,11 @@ void CCamera::Mouse_Move(int wndWidth, int wndHeight)
 	angle_z = (float)( (mid_y - mousePos.y) ) / 1000;
 
 	// The higher the value is the faster the camera looks around.
-	mView.y += angle_z * 2;
+	mView.setY(mView.y() + angle_z * 2);
 
 	// limit the rotation around the x-axis
-	if((mView.y - mPos.y) > 8)  mView.y = mPos.y + 8;
-	if((mView.y - mPos.y) <-8)  mView.y = mPos.y - 8;
+	if((mView.y() - mPos.y()) > 8)  mView.setY(mPos.y() + 8);
+	if((mView.y() - mPos.y()) <-8)  mView.setY(mPos.y() - 8);
 	
 	Rotate_View(-angle_y); // Rotate
 

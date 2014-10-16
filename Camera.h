@@ -14,33 +14,12 @@
 
 //NEW//////////////////NEW//////////////////NEW//////////////////NEW////////////////
 #include <math.h>
+#include "Vector.h"
 
 
 
 #define CAMERASPEED	0.03f				// The Camera Speed
 //NEW//////////////////NEW//////////////////NEW//////////////////NEW////////////////
-
-
-//////////////////////////////////////
-//The tVector3 Struct
-//////////////////////////////////////
-struct tVector3	// Extended 3D Vector Struct
-{			
-	tVector3() {} // Struct Constructor
-	tVector3 (float new_x, float new_y, float new_z) // Init Constructor	 
-	{ x = new_x; y = new_y; z = new_z; }
-	// overload + operator
-	tVector3 operator+(tVector3 vVector) {return tVector3(vVector.x+x, vVector.y+y, vVector.z+z);}
-	// overload - operator
-	tVector3 operator-(tVector3 vVector) {return tVector3(x-vVector.x, y-vVector.y, z-vVector.z);}
-	// overload * operator
-	tVector3 operator*(float number)	 {return tVector3(x*number, y*number, z*number);}
-	// overload / operator
-	tVector3 operator/(float number)	 {return tVector3(x/number, y/number, z/number);}
-	
-	float x, y, z;						// 3D vector coordinates
-};
-
 
 //////////////////////////////////////
 //The CCamera Class
@@ -50,9 +29,9 @@ class CCamera
 	public:
 	int isDragging = 0;
 	POINT mousePos;
-		tVector3 mPos;	
-		tVector3 mView;		
-		tVector3 mUp;			
+		Vector mPos;
+		Vector mView;
+		Vector mUp;
 
 //NEW//////////////////NEW//////////////////NEW//////////////////NEW////////////////
 

@@ -43,9 +43,9 @@ void display() {
 	glLoadIdentity();
 	glScalef(powe, powe, powe);
 
-	gluLookAt(objCamera.mPos.x,  objCamera.mPos.y,  objCamera.mPos.z,
-			  objCamera.mView.x, objCamera.mView.y, objCamera.mView.z,
-			  objCamera.mUp.x,   objCamera.mUp.y,   objCamera.mUp.z);
+	gluLookAt(objCamera.mPos.x(),  objCamera.mPos.y(),  objCamera.mPos.z(),
+			  objCamera.mView.x(), objCamera.mView.y(), objCamera.mView.z(),
+			  objCamera.mUp.x(),   objCamera.mUp.y(),   objCamera.mUp.z());
 
 	Draw_Grid();
 
@@ -63,8 +63,8 @@ void display() {
 }
 
 void update(int value) {
-	//engine.step(atomTable, numberOfAtoms);
-	algo.step(atomTable, numberOfAtoms);
+	engine.step(atomTable, numberOfAtoms);
+	//algo.step(atomTable, numberOfAtoms);
 	std::cout << atomTable[0].position().toString() << "\t\t" << atomTable[1].position().toString() << std::endl;
 	//std::cout << objCamera.isDragging << "\t\t" << std::endl;
 	glutPostRedisplay();

@@ -18,14 +18,9 @@ long double Algorithm::configurationEnergy(Atom* tab, int n) {
 				long double dz = powl(
 						tab[i].position().z() - tab[j].position().z(), 2);
 				long double r = sqrtl(dx + dy + dz); // dlugosc wektora laczacego punkty
-						/*
-						 std::cout << (double)dx << std::endl;
-						 std::cout << (double)dy << std::endl;
-						 std::cout << (double)dz << std::endl;
-						 std::cout << (double)r << std::endl;
-						 */
+
 				energy += 4 * slow * tab[i].mass() * sigma * sigma
-				* (powl(sigma / r, 12) - powl(sigma / r, 6));
+						* (powl(sigma / r, 12) - powl(sigma / r, 6));
 			}
 
 		}
@@ -39,20 +34,24 @@ void Algorithm::step(Atom* tab, int n) {
 	//std::cout << "rand: " << (rand() % 10000 / 10000. - 0.5) << std::endl;
 	long double dy = (rand() % 10001 / 10000. - 0.5) * delta;
 	long double dz = (rand() % 10001 / 10000. - 0.5) * delta;
-	tab[i].position().setX(tab[i].position().x() + dx);
+	tab[i].position() = tab[i].position() + Vector(dx, dy, dz);
+	//tab[i].position() = newx;
+	/*tab[i].position().setX(tab[i].position().x() + dx);
 	tab[i].position().setY(tab[i].position().y() + dy);
-	tab[i].position().setZ(tab[i].position().z() + dz);
+	tab[i].position().setZ(tab[i].position().z() + dz);*/
 	long double newEnergy = configurationEnergy(tab, n);
 	std::cout << "newEnergy: " << newEnergy << std::endl;
 	if (newEnergy > currentEnergy) {
 		long double boltzmann = expl(
 				-(newEnergy - currentEnergy) / boltzmannConstant / temp);
-		std::cout<< std::setprecision(12) << "boltz " << (double)boltzmann << std::endl;
+		std::cout << std::setprecision(12) << "boltz " << (double) boltzmann
+				<< std::endl;
 		if (rand() % 10001 / 10000. > 0./*boltzmann*/) {
 			std::cout << "cofamy" << std::endl;
-			tab[i].position().setX(tab[i].position().x() - dx);
+			tab[i].position() = tab[i].position() - Vector(dx, dy, dz);
+			/*tab[i].position().setX(tab[i].position().x() - dx);
 			tab[i].position().setY(tab[i].position().y() - dy);
-			tab[i].position().setZ(tab[i].position().z() - dz);
+			tab[i].position().setZ(tab[i].position().z() - dz);*/
 		}
 	}
 }

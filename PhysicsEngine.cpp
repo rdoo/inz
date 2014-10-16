@@ -18,9 +18,10 @@ void PhysicsEngine::step(Atom* tab, int n){
 		for (int j = 0; j < n; j++)
 			if (&tab[i] != &tab[j]){
 				len = lennarda(tab[j], tab[i]);
-				force.setX(force.x() + len.x());
+				force = force + len;
+				/*force.setX(force.x() + len.x());
 				force.setY(force.y() + len.y());
-				force.setZ(force.z() + len.z());
+				force.setZ(force.z() + len.z());*/
 				//std::cout << "force: " << force.toString() << std::endl;
 			}
 		step(tab[i], force);
