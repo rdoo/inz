@@ -12,7 +12,7 @@ PhysicsEngine physxEngine(0.0000000000000000000000001L);
 AlgorithmEngine algoEngine;
 Camera camera;
 
-int numberOfAtoms = 15;
+int numberOfAtoms = 25;
 Atom* atomTable = new Atom[numberOfAtoms];
 
 double powe = 100000000000;
@@ -103,7 +103,7 @@ void update(int value) {
 	std::cout << atomTable[0].position() << "\t\t" << atomTable[1].position() << std::endl;
 	//std::cout << objCamera.isDragging << "\t\t" << std::endl;
 	glutPostRedisplay();
-	glutTimerFunc(25, update, 0);
+	glutTimerFunc(15, update, 0);
 }
 
 void reshape(GLsizei width, GLsizei height) {
@@ -243,6 +243,56 @@ int main(int argc, char** argv) {
 	atom15.position(-1e-10L, 1e-10L, 1e-10L);
 	atom15.velocity(0.0, 0.0, 0.);
 
+	Atom atom16;
+	atom16.mass(2e-26);
+	atom16.position(-3e-10L, 1e-10L, 1e-10L);
+	atom16.velocity(0.0, 0.0, 0.);
+
+	Atom atom17;
+	atom17.mass(2e-26);
+	atom17.position(-1e-10L, 3e-10L, 1e-10L);
+	atom17.velocity(0.0, 0.0, 0.);
+
+	Atom atom18;
+	atom18.mass(2e-26);
+	atom18.position(-1e-10L, 1e-10L, 2e-10L);
+	atom18.velocity(0.0, 0.0, 0.);
+
+	Atom atom19;
+	atom19.mass(2e-26);
+	atom19.position(-1e-10L, -3e-10L, -1e-10L);
+	atom19.velocity(0.0, 0.0, 0.);
+
+	Atom atom20;
+	atom20.mass(2e-26);
+	atom20.position(3e-10L, 1e-10L, -2e-10L);
+	atom20.velocity(0.0, 0.0, 0.);
+
+	Atom atom21;
+	atom21.mass(2e-26);
+	atom21.position(-1e-10L, -2e-10L, -1e-10L);
+	atom21.velocity(0.0, 0.0, 0.);
+
+	Atom atom22;
+	atom22.mass(2e-26);
+	atom22.position(-1e-10L, -1e-10L, -1e-10L);
+	atom22.velocity(0.0, 0.0, 0.);
+
+	Atom atom23;
+	atom23.mass(2e-26);
+	atom23.position(-1e-10L, 1e-10L, 2e-10L);
+	atom23.velocity(0.0, 0.0, 0.);
+
+	Atom atom24;
+	atom24.mass(2e-26);
+	atom24.position(1e-10L, -1e-10L, -2e-10L);
+	atom24.velocity(0.0, 0.0, 0.);
+
+	Atom atom25;
+	atom25.mass(2e-26);
+	atom25.position(3e-10L, 2e-10L, 1e-10L);
+	atom25.velocity(0.0, 0.0, 0.);
+
 
 	atomTable[0] = atom1;
 	atomTable[1] = atom2;
@@ -259,6 +309,16 @@ int main(int argc, char** argv) {
 	atomTable[12] = atom13;
 	atomTable[13] = atom14;
 	atomTable[14] = atom15;
+	atomTable[15] = atom16;
+	atomTable[16] = atom17;
+	atomTable[17] = atom18;
+	atomTable[18] = atom19;
+	atomTable[19] = atom20;
+	atomTable[20] = atom21;
+	atomTable[21] = atom22;
+	atomTable[22] = atom23;
+	atomTable[23] = atom24;
+	atomTable[24] = atom25;
 
 	glutInit(&argc, argv);                 // Initialize GLUT
 
@@ -273,7 +333,7 @@ int main(int argc, char** argv) {
 
 	glutDisplayFunc(display); // Register display callback handler for window re-paint
 	glutReshapeFunc(reshape);
-	glutTimerFunc(25, update, 0);
+	glutTimerFunc(15, update, 0);
 
 	glutMouseFunc(Mouse_Button); // process mouse button push/release
 /*	glutMotionFunc(mouseMove); // process mouse dragging motion
