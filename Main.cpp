@@ -1,21 +1,16 @@
-#include <iostream>
-#include "PhysicsEngine.h"
-#include "Algorithm.h"
-#include <windows.h>
-#include <GL/glut.h>
 #include "Atom.h"
-#include <gmp.h>
-#include <math.h>
-#include <time.h>
-
 #include "Camera.h"
+#include "PhysicsEngine.h"
+#include "AlgorithmEngine.h"
+#include <iostream>
+//#include <windows.h>
+#include <GL/glut.h>
+#include <gmp.h>
+#include <ctime>
 
-void displayAtom(int atomNumber);
-void display();
-
-PhysicsEngine engine;
-Algorithm algo;
-Camera objCamera;
+PhysicsEngine physxEngine(0.0000000000000000000000001L);
+AlgorithmEngine algoEngine;
+Camera camera;
 
 int numberOfAtoms = 15;
 Atom* atomTable = new Atom[numberOfAtoms];
@@ -26,22 +21,22 @@ void Keyboard_Input()
 {
 	if((GetKeyState(VK_UP) & 0x80) || (GetKeyState('W') & 0x80))
 	{
-		objCamera.moveCamera(CAMERASPEED);
+		camera.moveCamera(CAMERASPEED);
 	}
 
 	if((GetKeyState(VK_DOWN) & 0x80) || (GetKeyState('S') & 0x80))
 	{
-		objCamera.moveCamera(-CAMERASPEED);
+		camera.moveCamera(-CAMERASPEED);
 	}
 
 	if((GetKeyState(VK_LEFT) & 0x80) || (GetKeyState('A') & 0x80))
 	{
-		objCamera.strafeCamera(-CAMERASPEED);
+		camera.strafeCamera(-CAMERASPEED);
 	}
 
 	if((GetKeyState(VK_RIGHT) & 0x80) || (GetKeyState('D') & 0x80))
 	{
-		objCamera.strafeCamera(CAMERASPEED);
+		camera.strafeCamera(CAMERASPEED);
 	}
 }
 
@@ -83,15 +78,15 @@ void display() {
 	glLoadIdentity();
 	glScalef(powe, powe, powe);
 
-	gluLookAt(objCamera.mPos.x(),  objCamera.mPos.y(),  objCamera.mPos.z(),
-			  objCamera.mView.x(), objCamera.mView.y(), objCamera.mView.z(),
-			  objCamera.mUp.x(),   objCamera.mUp.y(),   objCamera.mUp.z());
+	gluLookAt(camera.mPos.x(),  camera.mPos.y(),  camera.mPos.z(),
+			  camera.mView.x(), camera.mView.y(), camera.mView.z(),
+			  camera.mUp.x(),   camera.mUp.y(),   camera.mUp.z());
 
 	Draw_Grid();
 
 	Keyboard_Input();
-	if (objCamera.isDragging)
-	objCamera.mouseMove(640,640);
+	if (camera.isDragging)
+	camera.mouseMove(640,640);
 
 	for (int i = 0; i < numberOfAtoms; i++){
 		//glPushMatrix();
@@ -104,7 +99,7 @@ void display() {
 
 void update(int value) {
 	//engine.step(atomTable, numberOfAtoms);
-	algo.step(atomTable, numberOfAtoms);
+	algoEngine.step(atomTable, numberOfAtoms);
 	std::cout << atomTable[0].position() << "\t\t" << atomTable[1].position() << std::endl;
 	//std::cout << objCamera.isDragging << "\t\t" << std::endl;
 	glutPostRedisplay();
@@ -116,7 +111,7 @@ void reshape(GLsizei width, GLsizei height) { // GLsizei for non-negative intege
 	// Compute aspect ratio of the new window
 	if (height == 0)
 		height = 1;                // To prevent divide by 0
-	GLfloat aspect = (GLfloat) width / (GLfloat) height;
+	//GLfloat aspect = (GLfloat) width / (GLfloat) height; // TODO: uzyc tego jakos
 
 	// Set the aspect ratio of the clipping volume to match the viewport
 	glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
@@ -142,12 +137,12 @@ void Mouse_Button(int button, int state, int x, int y){
 	if (button == GLUT_LEFT_BUTTON) {
 		if (state == GLUT_DOWN) { // left mouse button pressed
 			SetCursorPos(mid_x, mid_y);
-			objCamera.isDragging = 1; // start dragging
+			camera.isDragging = 1; // start dragging
 			//GetCursorPos(&objCamera.mousePos); // save x where button first pressed
 		}
 		else  { /* (state = GLUT_UP) */
 			//angle += deltaAngle; // update camera turning angle
-			objCamera.isDragging = 0; // no longer dragging
+			camera.isDragging = 0; // no longer dragging
 		}
 	}
 }
@@ -281,9 +276,8 @@ int main(int argc, char** argv) {
 
 	glutCreateWindow("Klaster atomowy"); // Create a window with the given title
 	//engine.timeStep(60 * 60 * 24*10);
-	engine.timeStep(0.0000000000000000000000001L);
 
-	objCamera.positionCamera(0, 0, 0,	0, 0, -1,   0, 0.1, 0);
+	camera.positionCamera(0, 0, 0,	0, 0, -1,   0, 0.1, 0);
 
 	glutDisplayFunc(display); // Register display callback handler for window re-paint
 	glutReshapeFunc(reshape);

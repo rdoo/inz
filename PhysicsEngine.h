@@ -1,15 +1,16 @@
-#ifndef PhysicsEngine_h
-#define PhysicsEngine_h
+#ifndef PHYSICSENGINE_H
+#define PHYSICSENGINE_H
 
 #include "Atom.h"
 
 const long double G = 1e-11;
 
 class PhysicsEngine {
-	long double ts; //!< krok czasowy
-	long double totalTime = 0.; //!< calkowity czas symulacji
+	long double m_dt; //!< krok czasowy
+	long double m_totalTime = 0.; //!< calkowity czas symulacji
 
 public:
+	PhysicsEngine(long double dt);
 	/**
 	 * @brief Funkcja ustawiajaca krok czasowy
 	 * @arg dt to krok czasowy

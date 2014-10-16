@@ -1,5 +1,5 @@
 #include "Vector.h"
-#include <math.h>
+#include <cmath>
 
 Vector::Vector(long double x, long double y, long double z) {
 	m_x = x;

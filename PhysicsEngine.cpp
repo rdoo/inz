@@ -1,11 +1,14 @@
+#include "PhysicsEngine.h"
 #include <cmath>
 #include <iostream>
-#include <gmp.h>
-#include "PhysicsEngine.h"
 #include <iomanip>
 
+PhysicsEngine::PhysicsEngine(long double dt){
+	m_dt = dt;
+}
+
 void PhysicsEngine::timeStep(long double dt){
-	ts = dt;
+	m_dt = dt;
 }
 
 void PhysicsEngine::step(Atom* tab, int n){
@@ -27,18 +30,18 @@ void PhysicsEngine::step(Atom* tab, int n){
 }
 
 void PhysicsEngine::step(Atom& p, Vector& f){
-	totalTime += ts;
+	m_totalTime += m_dt;
 
-	p.position().setX(p.position().x() + p.velocity().x() * ts + f.x() / p.mass() /** ts * ts*/ / 2.); // x2 = x1 + Vx*t + Fx/m*t^2/2 (a = F/m)
-	p.position().setY(p.position().y() + p.velocity().y() * ts + f.y() / p.mass() /** ts * ts*/ / 2.); // y2 = y1 + Vy*t + Fy/m*t^2/2 (a = F/m)
-	p.position().setZ(p.position().z() + p.velocity().z() * ts + f.z() / p.mass() /** ts * ts*/ / 2.); // z2 = z1 + Vz*t + Fz/m*t^2/2 (a = F/m)
-	p.velocity().setX(p.velocity().x() + f.x() / p.mass() * ts); // Vx2 = Vx1 + Fx/m*t (a = F/m)
-	p.velocity().setY(p.velocity().y() + f.y() / p.mass() * ts); // Vy2 = Vy1 + Fy/m*t (a = F/m)
-	p.velocity().setZ(p.velocity().z() + f.z() / p.mass() * ts); // Vz2 = Vz1 + Fz/m*t (a = F/m)
+	p.position().setX(p.position().x() + p.velocity().x() * m_dt + f.x() / p.mass() /** ts * ts*/ / 2.); // x2 = x1 + Vx*t + Fx/m*t^2/2 (a = F/m)
+	p.position().setY(p.position().y() + p.velocity().y() * m_dt + f.y() / p.mass() /** ts * ts*/ / 2.); // y2 = y1 + Vy*t + Fy/m*t^2/2 (a = F/m)
+	p.position().setZ(p.position().z() + p.velocity().z() * m_dt + f.z() / p.mass() /** ts * ts*/ / 2.); // z2 = z1 + Vz*t + Fz/m*t^2/2 (a = F/m)
+	p.velocity().setX(p.velocity().x() + f.x() / p.mass() * m_dt); // Vx2 = Vx1 + Fx/m*t (a = F/m)
+	p.velocity().setY(p.velocity().y() + f.y() / p.mass() * m_dt); // Vy2 = Vy1 + Fy/m*t (a = F/m)
+	p.velocity().setZ(p.velocity().z() + f.z() / p.mass() * m_dt); // Vz2 = Vz1 + Fz/m*t (a = F/m)
 }
 
 long double PhysicsEngine::timeFromBeginning(){
-	return totalTime;
+	return m_totalTime;
 }
 
 Vector PhysicsEngine::gravity(Atom& p1, Atom& p2){

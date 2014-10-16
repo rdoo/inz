@@ -1,9 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <windows.h>					// Header File For Windows
-#include <math.h>
 #include "Vector.h"
+#include <windows.h>					// Header File For Windows
+#include <cmath>
 
 #define CAMERASPEED	0.03f				// The Camera Speed
 
