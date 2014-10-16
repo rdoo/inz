@@ -1,12 +1,12 @@
-#ifndef Atom_h
-#define Atom_h
+#ifndef ATOM_H
+#define ATOM_H
 
 #include "Vector.h"
 
 class Atom{
-	long double masa;
-	Vector pos; //!< wektor polozenia
-	Vector vel; //!< wektor predkosci
+	long double m_mass;
+	Vector m_position; //!< wektor polozenia
+	Vector m_velocity; //!< wektor predkosci
 	
 public:
 /**
