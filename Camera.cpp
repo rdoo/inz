@@ -95,17 +95,18 @@ void CCamera::Mouse_Button(int button, int state, int x, int y){
 */
 void CCamera::Mouse_Move(int wndWidth, int wndHeight)
 {
+
 	int mid_x = wndWidth  >> 1;	
 	int mid_y = wndHeight >> 1;	
 	float angle_y  = 0.0f;				
 	float angle_z  = 0.0f;							
 	
 	GetCursorPos(&mousePos);	// Get the 2D mouse cursor (x,y) position
-	
-	if( (mousePos.x == mid_x) && (mousePos.y == mid_y) ) return;
 
+	if( (mousePos.x == mid_x) && (mousePos.y == mid_y) ) return;
 	SetCursorPos(mid_x, mid_y);	// Set the mouse cursor in the center of the window
 
+	//if (!isDragging) return;
 	// Get the direction from the mouse cursor, set a resonable maneuvering speed
 	angle_y = (float)( (mid_x - mousePos.x) ) / 1000;
 	angle_z = (float)( (mid_y - mousePos.y) ) / 1000;
@@ -118,6 +119,8 @@ void CCamera::Mouse_Move(int wndWidth, int wndHeight)
 	if((mView.y - mPos.y) <-8)  mView.y = mPos.y - 8;
 	
 	Rotate_View(-angle_y); // Rotate
+
+
 }
 
 

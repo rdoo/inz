@@ -58,8 +58,8 @@ void display() {
 
 void update(int value) {
 	engine.step(atomTable, numberOfAtoms);
-	//std::cout << atomTable[0].position().toString() << "\t\t" << atomTable[1].position().toString() << std::endl;
-	std::cout << objCamera.isDragging << "\t\t" << std::endl;
+	std::cout << atomTable[0].position().toString() << "\t\t" << atomTable[1].position().toString() << std::endl;
+	//std::cout << objCamera.isDragging << "\t\t" << std::endl;
 	glutPostRedisplay();
 	glutTimerFunc(25, update, 0);
 }
@@ -129,8 +129,11 @@ void Draw_Grid()
 }
 
 void Mouse_Button(int button, int state, int x, int y){
+	int mid_x = 640  >> 1;
+	int mid_y = 640 >> 1;
 	if (button == GLUT_LEFT_BUTTON) {
 		if (state == GLUT_DOWN) { // left mouse button pressed
+			SetCursorPos(mid_x, mid_y);
 			objCamera.isDragging = 1; // start dragging
 			//GetCursorPos(&objCamera.mousePos); // save x where button first pressed
 		}
