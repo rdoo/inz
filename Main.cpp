@@ -103,11 +103,21 @@ void display() {
 }
 
 void update(int value) {
+	switch(m_enablePhysx){
+	case 0: break;
+	case 1:
+		algoEngine.step(atomTable, numberOfAtoms);
+		break;
+	case 2:
+		physxEngine.step(atomTable, numberOfAtoms);
+		break;
+	}
+	/*
 	if (m_enablePhysx)
 		physxEngine.step(atomTable, numberOfAtoms);
 	else
 		algoEngine.step(atomTable, numberOfAtoms);
-
+*/
 	std::cout << atomTable[0].position() << "\t\t" << atomTable[1].position() << std::endl;
 	//std::cout << objCamera.isDragging << "\t\t" << std::endl;
 	glutPostRedisplay();
@@ -347,8 +357,9 @@ int main(int argc, char** argv) {
 	glutTimerFunc(15, update, 0);
 
 	glutCreateMenu(processMenuEvents);
-	glutAddMenuEntry("Algorithm Engine", 0);
-	glutAddMenuEntry("Physics Engine", 1);
+	glutAddMenuEntry("Stop", 0);
+	glutAddMenuEntry("Algorithm Engine", 1);
+	glutAddMenuEntry("Physics Engine", 2);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 
