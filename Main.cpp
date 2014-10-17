@@ -12,7 +12,7 @@ PhysicsEngine physxEngine(0.0000000000000000000000001L);
 AlgorithmEngine algoEngine;
 Camera camera;
 
-int numberOfAtoms = 25;
+int numberOfAtoms = 50;
 Atom* atomTable = new Atom[numberOfAtoms];
 
 double powe = 100000000000;
@@ -176,6 +176,7 @@ int main(int argc, char** argv) {
 		atom5.position(-10, 2e-10L, -1e-9);
 		atom5.velocity(0.0, 0.0, 0.);
 	*/
+/*
 	Atom atom1;
 	atom1.mass(2e-26);
 	atom1.position(-1e-10L, 0, 0);
@@ -327,6 +328,8 @@ int main(int argc, char** argv) {
 	atomTable[22] = atom23;
 	atomTable[23] = atom24;
 	atomTable[24] = atom25;
+*/
+	generateAtoms(atomTable, numberOfAtoms, 6e-10L, 2e-26);
 
 	glutInit(&argc, argv);                 // Initialize GLUT
 
