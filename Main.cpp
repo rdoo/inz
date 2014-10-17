@@ -16,6 +16,11 @@ int numberOfAtoms = 25;
 Atom* atomTable = new Atom[numberOfAtoms];
 
 double powe = 100000000000;
+int m_enablePhysx = 0;
+
+void processMenuEvents(int enablePhysx) {
+	m_enablePhysx = enablePhysx;
+}
 
 void Keyboard_Input()
 {
@@ -98,8 +103,11 @@ void display() {
 }
 
 void update(int value) {
-	//engine.step(atomTable, numberOfAtoms);
-	algoEngine.step(atomTable, numberOfAtoms);
+	if (m_enablePhysx)
+		physxEngine.step(atomTable, numberOfAtoms);
+	else
+		algoEngine.step(atomTable, numberOfAtoms);
+
 	std::cout << atomTable[0].position() << "\t\t" << atomTable[1].position() << std::endl;
 	//std::cout << objCamera.isDragging << "\t\t" << std::endl;
 	glutPostRedisplay();
@@ -334,6 +342,12 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(display); // Register display callback handler for window re-paint
 	glutReshapeFunc(reshape);
 	glutTimerFunc(15, update, 0);
+
+	glutCreateMenu(processMenuEvents);
+	glutAddMenuEntry("Algorithm Engine", 0);
+	glutAddMenuEntry("Physics Engine", 1);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+
 
 	glutMouseFunc(Mouse_Button); // process mouse button push/release
 /*	glutMotionFunc(mouseMove); // process mouse dragging motion
