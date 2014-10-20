@@ -1,5 +1,5 @@
 #include "Main.h"
-
+#include <string>
 PhysicsEngine physxEngine(0.0000000000000000000000001L);
 AlgorithmEngine algoEngine;
 
@@ -11,8 +11,66 @@ Camera camera(width, height);
 int numberOfAtoms = 50;
 Atom* atomTable = new Atom[numberOfAtoms];
 
-double powe = 100000000000;
+double zoom = 200000000000;
 int m_programState = 0;
+
+
+void writeString(char* string, int x, int y, void* font)
+{
+    glRasterPos2i(x, y);
+    int len = strlen(string);
+    for (int i=0; i < len; i++)
+    {
+        glutBitmapCharacter(font, string[i]);
+    }
+}
+
+void print(int x, int y, const char *string)
+
+{
+
+        //Assume we are in MODEL_VIEW already
+
+	glPushMatrix ();
+
+	glLoadIdentity ();
+
+	glMatrixMode(GL_PROJECTION);
+
+	glPushMatrix ();
+
+	glLoadIdentity();
+
+
+
+	GLint viewport [4];
+
+	glGetIntegerv (GL_VIEWPORT, viewport);
+
+	gluOrtho2D (0,viewport[2], viewport[3], 0);
+
+
+
+	glDepthFunc (GL_ALWAYS);
+
+	glColor3f (1,1,1);
+
+	glRasterPos2f(x, y);
+
+	for (int i = 0; string!= '\0'; ++i)
+
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
+
+	glDepthFunc (GL_LESS);
+
+	glPopMatrix ();
+
+	glMatrixMode(GL_MODELVIEW);
+
+	glPopMatrix ();
+
+}
+
 
 int main(int argc, char** argv) {
 	std::cout << "Hello inzynierko!" << std::endl;
@@ -44,7 +102,11 @@ void display() {
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glScalef(powe, powe, powe);
+	glScalef(zoom, zoom, zoom);
+	char* s = "Some text/0";
+
+print(320, 320, s);
+
 
 	gluLookAt(camera.mPos.x(), camera.mPos.y(), camera.mPos.z(),
 			camera.mView.x(), camera.mView.y(), camera.mView.z(),
@@ -53,6 +115,7 @@ void display() {
 	for (int i = 0; i < numberOfAtoms; i++) {
 		displayAtom(i);
 	}
+
 
 	glFlush();  // Render now
 }
@@ -64,7 +127,7 @@ void displayAtom(int atomNumber) {
 	glTranslatef(atomTable[atomNumber].position().x(),
 			atomTable[atomNumber].position().y(),
 			atomTable[atomNumber].position().z());
-	glutWireSphere(.0000000001 * 0.7, 10, 10);
+	glutWireSphere(.0000000001 * 0.5, 10, 10);
 	glPopMatrix();
 }
 
@@ -81,7 +144,7 @@ void reshape(int width, int height) {
 	glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
 	glLoadIdentity();             // Reset
 
-	glOrtho(-100 * aspect, 100 * aspect, -100, 100, -100, 100);
+	glOrtho(-100 * aspect, 100 * aspect, -100, 100, -400, 400);
 
 	camera.setScreenSize(width, height);
 }
@@ -114,17 +177,11 @@ void handleMouseButton(int button, int state, int x, int y) {
 void handleKeyboard() {
 	if ((GetKeyState(VK_UP) & 0x80) || (GetKeyState('W') & 0x80)) {
 		camera.moveCamera(CAMERASPEED);
-	}
-
-	if ((GetKeyState(VK_DOWN) & 0x80) || (GetKeyState('S') & 0x80)) {
+	} else if ((GetKeyState(VK_DOWN) & 0x80) || (GetKeyState('S') & 0x80)) {
 		camera.moveCamera(-CAMERASPEED);
-	}
-
-	if ((GetKeyState(VK_LEFT) & 0x80) || (GetKeyState('A') & 0x80)) {
+	} else if ((GetKeyState(VK_LEFT) & 0x80) || (GetKeyState('A') & 0x80)) {
 		camera.strafeCamera(-CAMERASPEED);
-	}
-
-	if ((GetKeyState(VK_RIGHT) & 0x80) || (GetKeyState('D') & 0x80)) {
+	} else if ((GetKeyState(VK_RIGHT) & 0x80) || (GetKeyState('D') & 0x80)) {
 		camera.strafeCamera(CAMERASPEED);
 	}
 }
