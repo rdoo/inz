@@ -1,5 +1,11 @@
 #include "Camera.h"
 
+Camera::Camera(int width, int height){
+	m_screenWidth = width;
+	m_screenHeight = height;
+	positionCamera(0, 0, 0,	0, 0, -1,   0, 0.1, 0);
+}
+
 void Camera::positionCamera(float pos_x, float pos_y, float pos_z, float view_x,
 		float view_y, float view_z, float up_x, float up_y, float up_z) {
 	mPos = Vector(pos_x, pos_y, pos_z); // set position
@@ -40,10 +46,14 @@ void Camera::strafeCamera(float speed) {
 	mView.setZ(mView.z() + orthoVector.z() * speed / spowolnienie);
 }
 
-void Camera::mouseMove(int wndWidth, int wndHeight) {
+void Camera::mouseMove() {
 
-	int mid_x = wndWidth >> 1;
-	int mid_y = wndHeight >> 1;
+	if(!isDragging)
+		return;
+
+	int mid_x = getMidX();
+	int mid_y = getMidY();
+
 	float angle_y = 0.0f;
 	float angle_z = 0.0f;
 
@@ -68,4 +78,30 @@ void Camera::mouseMove(int wndWidth, int wndHeight) {
 
 	rotateView(-angle_y); // Rotate
 
+}
+
+void Camera::mouseButton(int button, int state, int x, int y){
+	if (button == GLUT_LEFT_BUTTON) {
+		if (state == GLUT_DOWN) { // left mouse button pressed
+			glutSetCursor(GLUT_CURSOR_NONE);
+			SetCursorPos(getMidX(), getMidY());
+			isDragging = 1; // start dragging
+		}
+		else  { /* (state = GLUT_UP) */
+			glutSetCursor(GLUT_CURSOR_INHERIT);
+			isDragging = 0; // no longer dragging
+		}
+	}
+}
+
+int Camera::getMidX(){
+	return glutGet(GLUT_WINDOW_X) + (m_screenWidth >> 1);
+}
+int Camera::getMidY(){
+	return glutGet(GLUT_WINDOW_Y) + (m_screenHeight >> 1);
+}
+
+void Camera::setScreenSize(int width, int height){
+	m_screenWidth = width;
+	m_screenHeight = height;
 }
