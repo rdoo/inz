@@ -23,7 +23,7 @@ long double AlgorithmEngine::configurationEnergy(Atom* tab, int n) {
 	return energy;
 }
 void AlgorithmEngine::step(Atom* tab, int n) {
-	long double currentEnergy = configurationEnergy(tab, n);
+	currentEnergy = configurationEnergy(tab, n);
 	std::cout << "old energy: " << currentEnergy << std::endl;
 	int i = rand() % n;
 	long double dx = (rand() % 10001 / 10000. - 0.5) * m_delta;
@@ -33,6 +33,9 @@ void AlgorithmEngine::step(Atom* tab, int n) {
 
 	long double newEnergy = configurationEnergy(tab, n);
 	std::cout << "newEnergy: " << newEnergy << std::endl;
+
+	steps++;
+
 	if (newEnergy > currentEnergy) {
 		long double boltzmann = expl(
 				-(newEnergy - currentEnergy) / boltzmannConstant / m_temperature);
@@ -43,4 +46,6 @@ void AlgorithmEngine::step(Atom* tab, int n) {
 			tab[i].position() = tab[i].position() - Vector(dx, dy, dz);
 		}
 	}
+	else
+		lastChangeStep = steps; //TODO: do zmiany
 }
