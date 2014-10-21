@@ -10,7 +10,7 @@ int height = 640;
 
 Camera camera(width, height);
 
-int numberOfAtoms = 50;
+int numberOfAtoms = 20;
 Atom* atomTable = new Atom[numberOfAtoms];
 
 double zoom = 200000000000;
@@ -26,6 +26,7 @@ void writeString(std::string str, double x, double y) {
 	glLoadIdentity();
 
 	glDisable( GL_DEPTH_TEST); // also disable the depth test so renders on top
+	glDisable(GL_LIGHTING);
 
 	glRasterPos2f(-1, 0.95); // center of screen. (-1,0) is center left.
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -34,6 +35,7 @@ void writeString(std::string str, double x, double y) {
 		glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, *p);
 	while (*(++p));
 
+	glEnable(GL_LIGHTING);
 	glEnable( GL_DEPTH_TEST); // Turn depth testing back on
 
 	glMatrixMode( GL_PROJECTION);
@@ -51,6 +53,17 @@ int main(int argc, char** argv) {
 	glutInit(&argc, argv);                 // Initialize GLUT
 	glutInitWindowSize(width, height); // Set the window's initial width & height
 	glutCreateWindow("Klaster atomowy"); // Create a window with the given title
+
+	float mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	float mat_shininess[] = { 50.0 };
+	float light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 
 	glutDisplayFunc(display); // Register display callback handler for window re-paint
 	glutReshapeFunc(reshape);
@@ -96,7 +109,7 @@ void displayAtom(int atomNumber) {
 	glTranslatef(atomTable[atomNumber].position().x(),
 			atomTable[atomNumber].position().y(),
 			atomTable[atomNumber].position().z());
-	glutWireSphere(.0000000001 * 0.5, 10, 10);
+	glutSolidSphere(.0000000001 * 0.5, 10, 10);
 	glPopMatrix();
 }
 
