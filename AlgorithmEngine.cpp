@@ -41,10 +41,10 @@ void AlgorithmEngine::step(Atom* tab, int n) {
 				-(newEnergy - currentEnergy) / boltzmannConstant / m_temperature);
 		std::cout << std::setprecision(12) << "boltz " << (double) boltzmann
 				<< std::endl;
-		if (rand() % 10001 / 10000. > 0./*boltzmann*/) {
+		//if (rand() % 10001 / 10000. > 0./*boltzmann*/) {
 			std::cout << "cofamy" << std::endl;
 			tab[i].position() = tab[i].position() - Vector(dx, dy, dz);
-		}
+		//}
 	}
 	else
 		lastChangeStep = steps; //TODO: do zmiany
