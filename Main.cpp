@@ -10,11 +10,11 @@ Camera camera(width, height);
 
 int numberOfAtoms = 50;
 Atom* atomTable = new Atom[numberOfAtoms];
+long double diameter = 6e-10L;
+long double atomMass = 2e-26; // Al TODO: poprawic
 
 double staticZoom = 200000000000;
 double dynamicZoom = 1;
-long double diameter = 6e-10L;
-long double atomMass = 2e-26; // al TODO: poprawic
 
 enum programState {
 	pause = 0, algorithm = 1, physics = 2, reset = 3
