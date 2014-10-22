@@ -2,6 +2,8 @@
 #include <string>
 #include <sstream>
 
+const double elementaryCharge = 1.602176565e-19;
+
 PhysicsEngine physxEngine(0.0000000000000000000000001L);
 AlgorithmEngine algoEngine;
 
@@ -29,7 +31,7 @@ void writeString(std::string str, double x, double y) {
 	glDisable(GL_DEPTH_TEST); // also disable the depth test so renders on top
 	glDisable(GL_LIGHTING);
 
-	glRasterPos2f(-1, 0.95); // center of screen. (-1,0) is center left.
+	glRasterPos2f(x, y); // center of screen. (-1,0) is center left.
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	const char * p = str.c_str();
 	do
@@ -65,6 +67,7 @@ int main(int argc, char** argv) {
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_NORMALIZE);
 
 	glutDisplayFunc(display); // Register display callback handler for window re-paint
@@ -73,8 +76,8 @@ int main(int argc, char** argv) {
 	glutMouseFunc(handleMouseButton); // process mouse button push/release
 
 	glutCreateMenu(processMenuEvents);
-	glutAddMenuEntry("Stop", 0);
-	glutAddMenuEntry("Algorithm Engine", 1);
+	glutAddMenuEntry("Pause (Space Bar)", 0);
+	glutAddMenuEntry("Algorithm Engine (Enter)", 1);
 	glutAddMenuEntry("Physics Engine", 2);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
@@ -98,12 +101,16 @@ void display() {
 		displayAtom(i);
 	}
 
-	std::ostringstream strs;
-	strs << "Current energy: " << (double) algoEngine.currentEnergy
-			<< " J    Steps#: " << algoEngine.steps
-			<< "   Last change at step#: " << algoEngine.lastChangeStep;
-	std::string str = strs.str();
-	writeString(str, -1., .95);
+	std::ostringstream energyStr, stepStr, lastStr;
+	energyStr << "Total energy: " << (double) algoEngine.currentEnergy
+			<< " J = " << (double) algoEngine.currentEnergy / elementaryCharge
+			<< " eV";
+	stepStr << "Step number: " << algoEngine.steps;
+	lastStr << "Last change at step: " << algoEngine.lastChangeStep;
+
+	writeString(energyStr.str(), -1., .95);
+	writeString(stepStr.str(), -1., .90);
+	writeString(lastStr.str(), -1., .85);
 
 	glFlush();  // Render now
 
@@ -171,12 +178,10 @@ void handleMouseButton(int button, int state, int x, int y) {
 	} else if (button == 3) { // scroll up
 		if (state == GLUT_DOWN) {
 			dynamicZoom += 0.1;
-			std::cout << "zoom: " << staticZoom << std::endl;
 		}
 	} else if (button == 4) { // scroll down
 		if (state == GLUT_DOWN) {
 			dynamicZoom -= 0.1;
-			std::cout << "zoom: " << staticZoom << std::endl;
 		}
 	}
 }
@@ -190,6 +195,10 @@ void handleKeyboard() {
 		camera.strafeCamera(-CAMERASPEED);
 	} else if ((GetKeyState(VK_RIGHT) & 0x80) || (GetKeyState('D') & 0x80)) {
 		camera.strafeCamera(CAMERASPEED);
+	} else if ((GetKeyState(VK_SPACE) & 0x80)) {
+		m_programState = 0;
+	} else if ((GetKeyState(VK_RETURN) & 0x80)) {
+		m_programState = 1;
 	}
 }
 
