@@ -1,8 +1,4 @@
 #include "Main.h"
-#include <string>
-#include <sstream>
-
-const double elementaryCharge = 1.602176565e-19;
 
 PhysicsEngine physxEngine(0.0000000000000000000000001L);
 AlgorithmEngine algoEngine;
@@ -17,35 +13,12 @@ Atom* atomTable = new Atom[numberOfAtoms];
 
 double staticZoom = 200000000000;
 double dynamicZoom = 1;
-int m_programState = 0;
 
-void writeString(std::string str, double x, double y) {
-	//TEXT
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix(); // save
-	glLoadIdentity(); // and clear
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
+enum programState {
+	pause = 0, algorithm = 1, physics = 2
+};
 
-	glDisable(GL_DEPTH_TEST); // also disable the depth test so renders on top
-	glDisable(GL_LIGHTING);
-
-	glRasterPos2f(x, y); // center of screen. (-1,0) is center left.
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	const char * p = str.c_str();
-	do
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *p);
-	while (*(++p));
-
-	glEnable(GL_LIGHTING);
-	glEnable(GL_DEPTH_TEST); // Turn depth testing back on
-
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix(); // revert back to the matrix I had before.
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-}
+programState state = pause;
 
 int main(int argc, char** argv) {
 	std::cout << "Hello inzynierko!" << std::endl;
@@ -148,13 +121,13 @@ void update(int value) {
 	handleKeyboard();
 	camera.mouseMove();
 
-	switch (m_programState) {
-	case 0:
+	switch (state) {
+	case pause:
 		break;
-	case 1:
+	case algorithm:
 		algoEngine.step(atomTable, numberOfAtoms);
 		break;
-	case 2:
+	case physics:
 		physxEngine.step(atomTable, numberOfAtoms);
 		break;
 	}
@@ -196,12 +169,40 @@ void handleKeyboard() {
 	} else if ((GetKeyState(VK_RIGHT) & 0x80) || (GetKeyState('D') & 0x80)) {
 		camera.strafeCamera(CAMERASPEED);
 	} else if ((GetKeyState(VK_SPACE) & 0x80)) {
-		m_programState = 0;
+		state = pause;
 	} else if ((GetKeyState(VK_RETURN) & 0x80)) {
-		m_programState = 1;
+		state = algorithm;
 	}
 }
 
-void processMenuEvents(int programState) {
-	m_programState = programState;
+void processMenuEvents(int progState) {
+	state = static_cast<programState>(progState);
+}
+
+void writeString(std::string str, double x, double y) {
+	//TEXT
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix(); // save
+	glLoadIdentity(); // and clear
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_DEPTH_TEST); // also disable the depth test so renders on top
+	glDisable(GL_LIGHTING);
+
+	glRasterPos2f(x, y); // center of screen. (-1,0) is center left.
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	const char * p = str.c_str();
+	do
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *p);
+	while (*(++p));
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST); // Turn depth testing back on
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix(); // revert back to the matrix I had before.
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }
