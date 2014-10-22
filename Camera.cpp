@@ -80,20 +80,6 @@ void Camera::mouseMove() {
 
 }
 
-void Camera::mouseButton(int button, int state, int x, int y){
-	if (button == GLUT_LEFT_BUTTON) {
-		if (state == GLUT_DOWN) { // left mouse button pressed
-			glutSetCursor(GLUT_CURSOR_NONE);
-			SetCursorPos(getMidX(), getMidY());
-			isDragging = 1; // start dragging
-		}
-		else  { /* (state = GLUT_UP) */
-			glutSetCursor(GLUT_CURSOR_INHERIT);
-			isDragging = 0; // no longer dragging
-		}
-	}
-}
-
 int Camera::getMidX(){
 	return glutGet(GLUT_WINDOW_X) + (m_screenWidth >> 1);
 }

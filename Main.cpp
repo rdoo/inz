@@ -13,7 +13,8 @@ Camera camera(width, height);
 int numberOfAtoms = 50;
 Atom* atomTable = new Atom[numberOfAtoms];
 
-double zoom = 200000000000;
+double staticZoom = 200000000000;
+double dynamicZoom = 1;
 int m_programState = 0;
 
 void writeString(std::string str, double x, double y) {
@@ -56,7 +57,7 @@ int main(int argc, char** argv) {
 
 	float mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 	float mat_shininess[] = { 50.0 };
-	float light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+	float light_position[] = { 1., 1., 1., 0.0 };
 
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
@@ -64,6 +65,7 @@ int main(int argc, char** argv) {
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_NORMALIZE);
 
 	glutDisplayFunc(display); // Register display callback handler for window re-paint
 	glutReshapeFunc(reshape);
@@ -85,6 +87,8 @@ void display() {
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	glScalef(dynamicZoom, dynamicZoom, dynamicZoom);
 
 	gluLookAt(camera.mPos.x(), camera.mPos.y(), camera.mPos.z(),
 			camera.mView.x(), camera.mView.y(), camera.mView.z(),
@@ -128,7 +132,7 @@ void reshape(int width, int height) {
 	glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
 	glLoadIdentity();             // Reset
 	glOrtho(-100 * aspect, 100 * aspect, -100, 100, -400, 400);
-	glScalef(zoom, zoom, zoom);
+	glScalef(staticZoom, staticZoom, staticZoom);
 
 	camera.setScreenSize(width, height);
 }
@@ -155,7 +159,26 @@ void update(int value) {
 }
 
 void handleMouseButton(int button, int state, int x, int y) {
-	camera.mouseButton(button, state, x, y);
+	if (button == GLUT_LEFT_BUTTON) {
+		if (state == GLUT_DOWN) { // left mouse button pressed
+			glutSetCursor(GLUT_CURSOR_NONE);
+			SetCursorPos(camera.getMidX(), camera.getMidY());
+			camera.isDragging = 1; // start dragging
+		} else { /* (state = GLUT_UP) */
+			glutSetCursor(GLUT_CURSOR_INHERIT);
+			camera.isDragging = 0; // no longer dragging
+		}
+	} else if (button == 3) { // scroll up
+		if (state == GLUT_DOWN) {
+			dynamicZoom += 0.1;
+			std::cout << "zoom: " << staticZoom << std::endl;
+		}
+	} else if (button == 4) { // scroll down
+		if (state == GLUT_DOWN) {
+			dynamicZoom -= 0.1;
+			std::cout << "zoom: " << staticZoom << std::endl;
+		}
+	}
 }
 
 void handleKeyboard() {

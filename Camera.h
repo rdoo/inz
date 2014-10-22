@@ -10,16 +10,15 @@
 
 class Camera {
 	POINT mousePos;
-	int isDragging = 0;
 	int m_screenWidth, m_screenHeight;
 public:
+	int isDragging = 0;
 	Vector mPos;
 	Vector mView;
 	Vector mUp;
 
 	Camera(int width, int height);
 	void strafeCamera(float speed);
-	void mouseButton(int button, int state, int x, int y);
 	void mouseMove();
 	void moveCamera(float speed);
 	void rotateView(float speed);
