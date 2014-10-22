@@ -10,7 +10,7 @@ int height = 640;
 
 Camera camera(width, height);
 
-int numberOfAtoms = 20;
+int numberOfAtoms = 50;
 Atom* atomTable = new Atom[numberOfAtoms];
 
 double zoom = 200000000000;
@@ -18,29 +18,29 @@ int m_programState = 0;
 
 void writeString(std::string str, double x, double y) {
 	//TEXT
-	glMatrixMode( GL_PROJECTION);
+	glMatrixMode(GL_PROJECTION);
 	glPushMatrix(); // save
 	glLoadIdentity(); // and clear
-	glMatrixMode( GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
 
-	glDisable( GL_DEPTH_TEST); // also disable the depth test so renders on top
+	glDisable(GL_DEPTH_TEST); // also disable the depth test so renders on top
 	glDisable(GL_LIGHTING);
 
 	glRasterPos2f(-1, 0.95); // center of screen. (-1,0) is center left.
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	const char * p = str.c_str();
 	do
-		glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, *p);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *p);
 	while (*(++p));
 
 	glEnable(GL_LIGHTING);
-	glEnable( GL_DEPTH_TEST); // Turn depth testing back on
+	glEnable(GL_DEPTH_TEST); // Turn depth testing back on
 
-	glMatrixMode( GL_PROJECTION);
+	glMatrixMode(GL_PROJECTION);
 	glPopMatrix(); // revert back to the matrix I had before.
-	glMatrixMode( GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 }
 
@@ -82,12 +82,7 @@ int main(int argc, char** argv) {
 void display() {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the color buffer
-	std::ostringstream strs;
-	strs << "Current energy: " << (double) algoEngine.currentEnergy
-			<< " J    Steps#: " << algoEngine.steps
-			<< "   Last change at step#: " << algoEngine.lastChangeStep;
-	std::string str = strs.str();
-	writeString(str, -1., .95);
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -98,6 +93,13 @@ void display() {
 	for (int i = 0; i < numberOfAtoms; i++) {
 		displayAtom(i);
 	}
+
+	std::ostringstream strs;
+	strs << "Current energy: " << (double) algoEngine.currentEnergy
+			<< " J    Steps#: " << algoEngine.steps
+			<< "   Last change at step#: " << algoEngine.lastChangeStep;
+	std::string str = strs.str();
+	writeString(str, -1., .95);
 
 	glFlush();  // Render now
 
