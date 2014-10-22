@@ -13,9 +13,11 @@ Atom* atomTable = new Atom[numberOfAtoms];
 
 double staticZoom = 200000000000;
 double dynamicZoom = 1;
+long double diameter = 6e-10L;
+long double atomMass = 2e-26; // al TODO: poprawic
 
 enum programState {
-	pause = 0, algorithm = 1, physics = 2
+	pause = 0, algorithm = 1, physics = 2, reset = 3
 };
 
 programState state = pause;
@@ -24,7 +26,7 @@ int main(int argc, char** argv) {
 	std::cout << "Hello inzynierko!" << std::endl;
 	srand(time(NULL));
 
-	generateAtoms(atomTable, numberOfAtoms, 6e-10L, 2e-26);
+	generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
 
 	glutInit(&argc, argv);                 // Initialize GLUT
 	glutInitWindowSize(width, height); // Set the window's initial width & height
@@ -52,6 +54,7 @@ int main(int argc, char** argv) {
 	glutAddMenuEntry("Pause (Space Bar)", 0);
 	glutAddMenuEntry("Algorithm Engine (Enter)", 1);
 	glutAddMenuEntry("Physics Engine", 2);
+	glutAddMenuEntry("Reset", 3);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	glutMainLoop();           // Enter the infinitely event-processing loop
@@ -129,6 +132,13 @@ void update(int value) {
 		break;
 	case physics:
 		physxEngine.step(atomTable, numberOfAtoms);
+		break;
+	case reset:
+		generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
+		algoEngine.currentEnergy = 0.;
+		algoEngine.steps = 0;
+		algoEngine.lastChangeStep = 0;
+		state = pause;
 		break;
 	}
 
