@@ -17,7 +17,15 @@ double staticZoom = 200000000000;
 double dynamicZoom = 1;
 
 enum programState {
-	pause = 0, algorithm = 1, physics = 2, reset = 3
+	pause = 0,
+	algorithm = 1,
+	physics = 2,
+	reset = 3,
+	_2 = 4,
+	_10 = 5,
+	_20 = 6,
+	_50 = 7,
+	_100 = 8
 };
 
 programState state = pause;
@@ -50,11 +58,19 @@ int main(int argc, char** argv) {
 	glutTimerFunc(15, update, 0);
 	glutMouseFunc(handleMouseButton); // process mouse button push/release
 
+	int submenu = glutCreateMenu(processMenuEvents);
+	glutAddMenuEntry("2", 4);
+	glutAddMenuEntry("10", 5);
+	glutAddMenuEntry("20", 6);
+	glutAddMenuEntry("50", 7);
+	glutAddMenuEntry("100", 8);
+
 	glutCreateMenu(processMenuEvents);
 	glutAddMenuEntry("Pause (Space Bar)", 0);
 	glutAddMenuEntry("Algorithm Engine (Enter)", 1);
 	glutAddMenuEntry("Physics Engine", 2);
 	glutAddMenuEntry("Reset", 3);
+	glutAddSubMenu("Number of atoms", submenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	glutMainLoop();           // Enter the infinitely event-processing loop
@@ -139,6 +155,31 @@ void update(int value) {
 		algoEngine.steps = 0;
 		algoEngine.lastChangeStep = 0;
 		state = pause;
+		break;
+	case _2:
+		numberOfAtoms = 2;
+		atomTable = new Atom[numberOfAtoms];
+		state = reset;
+		break;
+	case _10:
+		numberOfAtoms = 10;
+		atomTable = new Atom[numberOfAtoms];
+		state = reset;
+		break;
+	case _20:
+		numberOfAtoms = 20;
+		atomTable = new Atom[numberOfAtoms];
+		state = reset;
+		break;
+	case _50:
+		numberOfAtoms = 50;
+		atomTable = new Atom[numberOfAtoms];
+		state = reset;
+		break;
+	case _100:
+		numberOfAtoms = 100;
+		atomTable = new Atom[numberOfAtoms];
+		state = reset;
 		break;
 	}
 
