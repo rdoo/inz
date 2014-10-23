@@ -31,6 +31,8 @@ public:
 	 * @return zwraca calkowity czas trwania symulacji
 	 */
 	long double timeFromBeginning();
+
+	void resetTime();
 	/**
 	 * @brief Funkcja zwracajaca wektor sily grawitacyjnej pomiedzy dwoma punktami
 	 * @arg p1, p2 to punkty, dla ktorych sila jest liczona

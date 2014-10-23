@@ -1,6 +1,6 @@
 #include "Main.h"
 
-PhysicsEngine physxEngine(0.00000000000000001L);
+PhysicsEngine physxEngine(1e-17);
 AlgorithmEngine algoEngine;
 
 int width = 640;
@@ -12,9 +12,9 @@ int numberOfSteps = 100;
 int numberOfAtoms = 5;
 Atom* atomTable = new Atom[numberOfAtoms];
 long double diameter = 6e-10L;
-long double atomMass = 2e-26; // Al TODO: poprawic
+long double atomMass = 4.480389e-26; // Al
 
-double staticZoom = 200000000000;
+double staticZoom = 50000000000;
 double dynamicZoom = 1;
 
 enum programState {
@@ -41,6 +41,8 @@ programState state = pause;
 
 int main(int argc, char** argv) {
 	std::cout << "Hello inzynierko!" << std::endl;
+	std::cout << "Initial number of atoms: " << numberOfAtoms << std::endl;
+	std::cout << "Initial steps per frame: " << numberOfSteps << std::endl;
 	srand(time(NULL));
 
 	generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
@@ -86,8 +88,8 @@ int main(int argc, char** argv) {
 
 	glutCreateMenu(processMenuEvents);
 	glutAddMenuEntry("Pause (Space Bar)", 0);
-	glutAddMenuEntry("Algorithm Engine (Enter)", 1);
-	glutAddMenuEntry("Physics Engine", 2);
+	glutAddMenuEntry("Monte Carlo (Enter)", 1);
+	glutAddMenuEntry("Physical simulation", 2);
 	glutAddMenuEntry("Reset", 3);
 	glutAddSubMenu("Number of atoms", atomMenu);
 	glutAddSubMenu("Number of steps per frame", stepMenu);
@@ -113,16 +115,34 @@ void display() {
 		displayAtom(i);
 	}
 
-	std::ostringstream energyStr, stepStr, lastStr;
+	std::ostringstream titleStr, energyStr, stepStr, lastStr, workStr;
+
+	workStr << "[WORK IN PROGRESS]";
+
+	if (state == pause) { // TODO: do poprawy
+		titleStr << "PAUSED";
+	} else if (state == physics) {
+		std::ostringstream timeStr;
+		titleStr << "PHYSICAL SIMULATION";
+		timeStr << "Virtual simulation time in ns: "
+				<< (double) physxEngine.timeFromBeginning() * 1.e9 << std::endl;
+
+		writeString(timeStr.str(), -1., .75);
+	} else {
+		titleStr << "MONTE CARLO ALGORITHM";
+	}
+
 	energyStr << "Total energy: " << (double) algoEngine.currentEnergy
 			<< " J = " << (double) algoEngine.currentEnergy / elementaryCharge
 			<< " eV";
 	stepStr << "Step number: " << algoEngine.steps;
 	lastStr << "Last change at step: " << algoEngine.lastChangeStep;
 
-	writeString(energyStr.str(), -1., .95);
-	writeString(stepStr.str(), -1., .90);
-	writeString(lastStr.str(), -1., .85);
+	writeString(workStr.str(), -1., -1.);
+	writeString(titleStr.str(), -1., .95);
+	writeString(energyStr.str(), -1., .90);
+	writeString(stepStr.str(), -1., .85);
+	writeString(lastStr.str(), -1., .80);
 
 	glFlush();  // Render now
 
@@ -179,6 +199,7 @@ void update(int value) {
 		algoEngine.currentEnergy = 0.;
 		algoEngine.steps = 0;
 		algoEngine.lastChangeStep = 0;
+		physxEngine.resetTime();
 		state = pause;
 		break;
 	case a2:
@@ -263,7 +284,8 @@ void handleMouseButton(int button, int state, int x, int y) {
 		}
 	} else if (button == 4) { // scroll down
 		if (state == GLUT_DOWN) {
-			dynamicZoom -= 0.1;
+			if (dynamicZoom > 0.1)
+				dynamicZoom -= 0.1;
 		}
 	}
 }
