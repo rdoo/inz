@@ -48,4 +48,6 @@ public:
 void generateAtoms(Atom* tab, int numberOfAtoms, long double diameter,
 		long double mass);
 
+void resetAtomsVelocities(Atom* tab, int numberOfAtoms);
+
 #endif

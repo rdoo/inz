@@ -47,3 +47,10 @@ void generateAtoms(Atom* tab, int numberOfAtoms, long double diameter,
 		tab[i] = atom;
 	}
 }
+
+void resetAtomsVelocities(Atom* tab, int numberOfAtoms) {
+	for (int i = 0; i < numberOfAtoms; i++) {
+		tab[i].velocity(0, 0, 0);
+	}
+}
+

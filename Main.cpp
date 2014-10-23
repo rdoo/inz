@@ -164,9 +164,10 @@ void update(int value) {
 	case pause:
 		break;
 	case algorithm:
-		for (int i = 0; i < numberOfSteps; i++) { // TODO: dodac reset velocities
+		for (int i = 0; i < numberOfSteps; i++) {
 			algoEngine.step(atomTable, numberOfAtoms);
 		}
+		resetAtomsVelocities(atomTable, numberOfAtoms);
 		break;
 	case physics:
 		for (int i = 0; i < numberOfSteps; i++) {
