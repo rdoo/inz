@@ -8,7 +8,8 @@ int height = 640;
 
 Camera camera(width, height);
 
-int numberOfAtoms = 3;
+int numberOfSteps = 100;
+int numberOfAtoms = 5;
 Atom* atomTable = new Atom[numberOfAtoms];
 long double diameter = 6e-10L;
 long double atomMass = 2e-26; // Al TODO: poprawic
@@ -17,15 +18,23 @@ double staticZoom = 200000000000;
 double dynamicZoom = 1;
 
 enum programState {
-	pause = 0,
-	algorithm = 1,
-	physics = 2,
-	reset = 3,
-	_2 = 4,
-	_10 = 5,
-	_20 = 6,
-	_50 = 7,
-	_100 = 8
+	pause,
+	algorithm,
+	physics,
+	reset,
+	a2 = 20,
+	a4,
+	a10,
+	a20,
+	a50,
+	a100,
+	s1 = 30,
+	s5,
+	s10,
+	s30,
+	s50,
+	s100,
+	s1000
 };
 
 programState state = pause;
@@ -55,22 +64,33 @@ int main(int argc, char** argv) {
 
 	glutDisplayFunc(display); // Register display callback handler for window re-paint
 	glutReshapeFunc(reshape);
-	glutTimerFunc(15, update, 0);
+	glutTimerFunc(1, update, 0);
 	glutMouseFunc(handleMouseButton); // process mouse button push/release
 
-	int submenu = glutCreateMenu(processMenuEvents);
-	glutAddMenuEntry("2", 4);
-	glutAddMenuEntry("10", 5);
-	glutAddMenuEntry("20", 6);
-	glutAddMenuEntry("50", 7);
-	glutAddMenuEntry("100", 8);
+	int atomMenu = glutCreateMenu(processMenuEvents);
+	glutAddMenuEntry("2", 20);
+	glutAddMenuEntry("4", 21);
+	glutAddMenuEntry("10", 22);
+	glutAddMenuEntry("20", 23);
+	glutAddMenuEntry("50", 24);
+	glutAddMenuEntry("100", 25);
+
+	int stepMenu = glutCreateMenu(processMenuEvents);
+	glutAddMenuEntry("1", 30);
+	glutAddMenuEntry("5", 31);
+	glutAddMenuEntry("10", 32);
+	glutAddMenuEntry("30", 33);
+	glutAddMenuEntry("50", 34);
+	glutAddMenuEntry("100", 35);
+	glutAddMenuEntry("1000", 36);
 
 	glutCreateMenu(processMenuEvents);
 	glutAddMenuEntry("Pause (Space Bar)", 0);
 	glutAddMenuEntry("Algorithm Engine (Enter)", 1);
 	glutAddMenuEntry("Physics Engine", 2);
 	glutAddMenuEntry("Reset", 3);
-	glutAddSubMenu("Number of atoms", submenu);
+	glutAddSubMenu("Number of atoms", atomMenu);
+	glutAddSubMenu("Number of steps per frame", stepMenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	glutMainLoop();           // Enter the infinitely event-processing loop
@@ -144,10 +164,14 @@ void update(int value) {
 	case pause:
 		break;
 	case algorithm:
-		algoEngine.step(atomTable, numberOfAtoms);
+		for (int i = 0; i < numberOfSteps; i++) {
+			algoEngine.step(atomTable, numberOfAtoms);
+		}
 		break;
 	case physics:
-		physxEngine.step(atomTable, numberOfAtoms);
+		for (int i = 0; i < numberOfSteps; i++) {
+			physxEngine.step(atomTable, numberOfAtoms);
+		}
 		break;
 	case reset:
 		generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
@@ -156,37 +180,70 @@ void update(int value) {
 		algoEngine.lastChangeStep = 0;
 		state = pause;
 		break;
-	case _2:
+	case a2:
 		numberOfAtoms = 2;
 		atomTable = new Atom[numberOfAtoms];
 		state = reset;
 		break;
-	case _10:
+	case a4:
+		numberOfAtoms = 4;
+		atomTable = new Atom[numberOfAtoms];
+		state = reset;
+		break;
+	case a10:
 		numberOfAtoms = 10;
 		atomTable = new Atom[numberOfAtoms];
 		state = reset;
 		break;
-	case _20:
+	case a20:
 		numberOfAtoms = 20;
 		atomTable = new Atom[numberOfAtoms];
 		state = reset;
 		break;
-	case _50:
+	case a50:
 		numberOfAtoms = 50;
 		atomTable = new Atom[numberOfAtoms];
 		state = reset;
 		break;
-	case _100:
+	case a100:
 		numberOfAtoms = 100;
 		atomTable = new Atom[numberOfAtoms];
 		state = reset;
 		break;
+	case s1:
+		numberOfSteps = 1;
+		state = pause;
+		break;
+	case s5:
+		numberOfSteps = 5;
+		state = pause;
+		break;
+	case s10:
+		numberOfSteps = 10;
+		state = pause;
+		break;
+	case s30:
+		numberOfSteps = 30;
+		state = pause;
+		break;
+	case s50:
+		numberOfSteps = 50;
+		state = pause;
+		break;
+	case s100:
+		numberOfSteps = 100;
+		state = pause;
+		break;
+	case s1000:
+		numberOfSteps = 1000;
+		state = pause;
+		break;
 	}
 
-	std::cout << atomTable[0].position() << "\t\t" << atomTable[1].position()
-			<< std::endl;
+	//std::cout << atomTable[0].position() << "\t\t" << atomTable[1].position()
+	//		<< std::endl;
 	glutPostRedisplay();
-	glutTimerFunc(15, update, 0);
+	glutTimerFunc(1, update, 0);
 }
 
 void handleMouseButton(int button, int state, int x, int y) {
