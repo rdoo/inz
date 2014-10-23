@@ -1,6 +1,6 @@
 #include "Main.h"
 
-PhysicsEngine physxEngine(0.0000000000000000000000001L);
+PhysicsEngine physxEngine(0.00000000000000001L);
 AlgorithmEngine algoEngine;
 
 int width = 640;
@@ -164,7 +164,7 @@ void update(int value) {
 	case pause:
 		break;
 	case algorithm:
-		for (int i = 0; i < numberOfSteps; i++) {
+		for (int i = 0; i < numberOfSteps; i++) { // TODO: dodac reset velocities
 			algoEngine.step(atomTable, numberOfAtoms);
 		}
 		break;
