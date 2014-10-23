@@ -1,6 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#define FREEGLUT_STATIC
+
 #include "Vector.h"
 #include <windows.h>					// Header File For Windows
 #include <GL/glut.h>
