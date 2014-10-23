@@ -8,7 +8,7 @@ int height = 640;
 
 Camera camera(width, height);
 
-int numberOfAtoms = 50;
+int numberOfAtoms = 3;
 Atom* atomTable = new Atom[numberOfAtoms];
 long double diameter = 6e-10L;
 long double atomMass = 2e-26; // Al TODO: poprawic
