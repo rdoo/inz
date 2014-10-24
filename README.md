@@ -3,5 +3,7 @@ http://www.cs.nyu.edu/exact/core/gmp/
 http://njoubert.com/teaching/cs184_fa08/section/sec09_camera.pdf
 http://echelog.com/logs/browse/opengl/1391468400
 
+http://imechanica.org/files/Hildebrand-Abeyaratne.pdf dla niklu str. 7
+
 inz
 ===

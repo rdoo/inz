@@ -76,8 +76,12 @@ Vector PhysicsEngine::gravity(Atom& p1, Atom& p2) {
 
 Vector PhysicsEngine::lennarda(Atom& p1, Atom& p2) {
 	Vector lenn;
-	long double sigma = 2.85e-10L;
-	long double epsilon = 8.01088e-20; // dla Al
+	//long double sigma = 2.85e-10L; TODO: poprrawic
+	//long double epsilon = 8.01088e-20; // dla Al
+
+	long double sigma = 2.2808e-10L;
+	long double epsilon = 8.31468e-20; // dla Ni
+
 	long double r = p1.position().distanceFromVector(p2.position()); // dlugosc wektora laczacego punkty
 			/*
 			 std::cout << (double)dx << std::endl;
