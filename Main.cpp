@@ -9,7 +9,7 @@ int height = 640;
 Camera camera(width, height);
 
 int numberOfSteps = 100;
-int numberOfAtoms = 5;
+int numberOfAtoms = 25;
 Atom* atomTable = new Atom[numberOfAtoms];
 long double diameter = 6e-10L;
 long double atomMass = 4.480389e-26; // Al
@@ -195,7 +195,9 @@ void update(int value) {
 		}
 		break;
 	case reset:
-		generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
+		//generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
+		generateAtomsInCube(atomTable, numberOfAtoms, diameter / 2., atomMass,
+				10, 10);
 		algoEngine.currentEnergy = 0.;
 		algoEngine.steps = 0;
 		algoEngine.lastChangeStep = 0;

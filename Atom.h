@@ -48,6 +48,9 @@ public:
 void generateAtoms(Atom* tab, int numberOfAtoms, long double diameter,
 		long double mass);
 
+void generateAtomsInCube(Atom* tab, int numberOfAtoms, long double diameter,
+		long double mass, int x, int y);
+
 void resetAtomsVelocities(Atom* tab, int numberOfAtoms);
 
 #endif
