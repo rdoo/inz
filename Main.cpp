@@ -28,6 +28,7 @@ enum programState {
 	save,
 	axes,
 	rotate,
+	read,
 	a2 = 20,
 	a5,
 	a10,
@@ -103,6 +104,7 @@ int main(int argc, char** argv) {
 	glutAddMenuEntry("Save to file", 4);
 	glutAddMenuEntry("Enable/disable axes", 5);
 	glutAddMenuEntry("Enable/disable rotate", 6);
+	glutAddMenuEntry("Read", 7);
 	glutAddSubMenu("Number of atoms", atomMenu);
 	glutAddSubMenu("Number of steps per frame", stepMenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
@@ -310,6 +312,46 @@ void update(int value) {
 	case rotate:
 		rotateEnabled = rotateEnabled ? false : true;
 		state = lastState;
+		break;
+	case read: {
+		std::ifstream reader;
+		reader.open("25-198221.txt");
+		int ratoms, rsteps, rlastchange;
+		long double renergy;
+		std::string line;
+
+		std::getline(reader, line);
+		ratoms = atoi(line.substr(2, 3).c_str());
+		std::getline(reader, line);
+		rsteps = atoi(line.substr(2, 10).c_str());
+		std::getline(reader, line);
+		rlastchange = atoi(line.substr(2, 10).c_str());
+		std::getline(reader, line);
+		renergy = atof(line.substr(2, 10).c_str());
+
+		algoEngine.steps = rsteps;
+		algoEngine.lastChangeStep = rlastchange;
+		algoEngine.currentEnergy = renergy;
+		numberOfAtoms = ratoms;
+		atomTable = new Atom[numberOfAtoms]; //TODO :zmienic
+		Atom atom;
+		Vector position;
+		int i = 0;
+		long double x, y, z;
+		while (std::getline(reader, line)) {
+			std::istringstream iss(line);
+			iss >> x;
+			iss >> y;
+			iss >> z;
+			position = Vector(x, y, z);
+			atom = Atom(atomMass, position, Vector(0., 0., 0.));
+			atomTable[i] = atom;
+			i++;
+		}
+		reader.close();
+	}
+
+		state = pause;
 		break;
 	case save:
 		std::ofstream plik;
