@@ -14,7 +14,7 @@ Atom* atomTable = new Atom[numberOfAtoms];
 long double diameter = 6e-10L;
 long double atomMass = 4.480389e-26; // Al
 
-double staticZoom = 50000000000;
+double staticZoom = 100000000000;
 double dynamicZoom = 1;
 
 enum programState {
@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
 }
 
 void display() {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+	glClearColor(0.0f, 0.0f, 0.0f, 0.5f); // Set background color to black and opaque
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the color buffer
 
 	glMatrixMode(GL_MODELVIEW);
@@ -116,9 +116,16 @@ void display() {
 			camera.mView.x(), camera.mView.y(), camera.mView.z(),
 			camera.mUp.x(), camera.mUp.y(), camera.mUp.z());
 
+	//glPushMatrix();
+
+	drawAxes();
+
 	for (int i = 0; i < numberOfAtoms; i++) {
 		displayAtom(i);
 	}
+
+	//glPopMatrix();
+	//writeStringIn3D("xdsfsdsdds", 0, -5e-10, 5e-10);
 
 	std::ostringstream titleStr, energyStr, stepStr, lastStr, workStr;
 
@@ -177,7 +184,7 @@ void displayAtom(int atomNumber) {
 	glTranslatef(atomTable[atomNumber].position().x(),
 			atomTable[atomNumber].position().y(),
 			atomTable[atomNumber].position().z());
-	glutSolidSphere(.0000000001 * 0.5, 10, 10);
+	glutSolidSphere(.0000000001 * 0.5, 20, 20);
 	glPopMatrix();
 }
 
@@ -384,4 +391,53 @@ void writeString(std::string str, double x, double y) {
 	glPopMatrix(); // revert back to the matrix I had before.
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+}
+
+void writeStringIn3D(std::string str, double x, double y, double z) {
+	glRasterPos3f(x, y, z);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	const char * p = str.c_str();
+	do
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, *p);
+	while (*(++p));
+}
+
+void drawAxes() {
+	double ang = 1e-10;
+	int halfLength = 6;
+	double off = 0.2;
+
+	glDisable(GL_LIGHTING);
+	glColor3f(1, 1, 1);
+
+	glBegin(GL_LINES);
+	glVertex3f(-halfLength * ang, -halfLength * ang, halfLength * ang);
+	glVertex3f(halfLength * ang, -halfLength * ang, halfLength * ang);
+
+	glVertex3f(-halfLength * ang, -halfLength * ang, halfLength * ang);
+	glVertex3f(-halfLength * ang, halfLength * ang, halfLength * ang);
+
+	glVertex3f(-halfLength * ang, -halfLength * ang, -halfLength * ang);
+	glVertex3f(-halfLength * ang, -halfLength * ang, halfLength * ang);
+	glEnd();
+
+	for (int i = -halfLength + 1; i < halfLength; i++) {
+		std::ostringstream oss;
+		oss << i;
+		writeStringIn3D(oss.str(), i * ang, (-halfLength + off) * ang,
+				halfLength * ang);
+		writeStringIn3D(oss.str(), (-halfLength + off) * ang, i * ang,
+				halfLength * ang);
+		writeStringIn3D(oss.str(), -halfLength * ang, (-halfLength + off) * ang,
+				i * ang);
+	}
+
+	writeStringIn3D("x [A]", 0 * ang, (-halfLength - 2 * off) * ang,
+			halfLength * ang);
+	writeStringIn3D("y [A]", (-halfLength - 4 * off) * ang, 0 * ang,
+			halfLength * ang);
+	writeStringIn3D("z [A]", -halfLength * ang, (-halfLength - 2 * off) * ang,
+			0 * ang);
+
+	glEnable(GL_LIGHTING);
 }

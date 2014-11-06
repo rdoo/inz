@@ -24,5 +24,7 @@ void handleMouseButton(int button, int state, int x, int y);
 void handleKeyboard();
 void processMenuEvents(int programState);
 void writeString(std::string str, double x, double y);
+void writeStringIn3D(std::string str, double x, double y, double z);
+void drawAxes();
 
 #endif

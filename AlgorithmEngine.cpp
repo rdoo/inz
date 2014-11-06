@@ -41,7 +41,7 @@ long double AlgorithmEngine::configurationEnergy2(Atom* tab, int n) {
 		int i = rand() % n;
 		long double dx = (rand() % 10001 / 10000. - 0.5) * m_delta;
 		long double dy = (rand() % 10001 / 10000. - 0.5) * m_delta;
-		long double dz =0;// (rand() % 10001 / 10000. - 0.5) * m_delta;
+		long double dz = (rand() % 10001 / 10000. - 0.5) * m_delta;
 		tab[i].position() = tab[i].position() + Vector(dx, dy, dz);
 
 		long double newEnergy = configurationEnergy(tab, n);
