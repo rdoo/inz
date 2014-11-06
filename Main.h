@@ -12,6 +12,7 @@
 #include <gmp.h>
 #include <ctime>
 #include <sstream>
+#include <fstream>
 
 const double elementaryCharge = 1.602176565e-19;
 

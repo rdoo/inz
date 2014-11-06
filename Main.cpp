@@ -22,6 +22,7 @@ enum programState {
 	algorithm,
 	physics,
 	reset,
+	save,
 	a2 = 20,
 	a4,
 	a10,
@@ -91,6 +92,7 @@ int main(int argc, char** argv) {
 	glutAddMenuEntry("Monte Carlo (Enter)", 1);
 	glutAddMenuEntry("Physical simulation", 2);
 	glutAddMenuEntry("Reset", 3);
+	glutAddMenuEntry("Save to file", 4);
 	glutAddSubMenu("Number of atoms", atomMenu);
 	glutAddSubMenu("Number of steps per frame", stepMenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
@@ -260,6 +262,21 @@ void update(int value) {
 		break;
 	case s1000:
 		numberOfSteps = 1000;
+		state = pause;
+		break;
+	case save:
+		std::ofstream plik;
+		std::ostringstream name, comment;
+		name << numberOfAtoms << "-" << algoEngine.steps << ".txt";
+		comment << "# " << numberOfAtoms << " atoms" << std::endl << "# "
+				<< algoEngine.steps << " steps" << std::endl << "# "
+				<< (double) algoEngine.currentEnergy / elementaryCharge << " eV"
+				<< std::endl;
+		plik.open(name.str().c_str());
+		plik << comment.str();
+		for (int i = 0; i < numberOfAtoms; i++)
+			plik << atomTable[i].position() << std::endl;
+		plik.close();
 		state = pause;
 		break;
 	}

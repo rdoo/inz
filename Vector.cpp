@@ -57,9 +57,14 @@ Vector Vector::operator*(long double number) {
 Vector Vector::operator/(long double number) {
 	return Vector(m_x / number, m_y / number, m_z / number);
 }
-
+/*
+ std::ostream& operator<<(std::ostream& os, const Vector& v) {
+ os << "x: " << (double) v.m_x << "\t y: " << (double) v.m_y << "\t z: "
+ << (double) v.m_z;
+ return os;
+ }
+ */
 std::ostream& operator<<(std::ostream& os, const Vector& v) {
-	os << "x: " << (double) v.m_x << "\t y: " << (double) v.m_y << "\t z: "
-			<< (double) v.m_z;
+	os << (double) v.m_x << "\t" << (double) v.m_y << "\t" << (double) v.m_z;
 	return os;
 }
