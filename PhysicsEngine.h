@@ -10,6 +10,7 @@ class PhysicsEngine {
 	long double m_totalTime = 0.; //!< calkowity czas symulacji
 
 public:
+	long double currentEnergy;
 	PhysicsEngine(long double dt);
 	/**
 	 * @brief Funkcja ustawiajaca krok czasowy
@@ -41,6 +42,8 @@ public:
 	Vector gravity(Atom& p1, Atom& p2);
 
 	Vector lennarda(Atom& p1, Atom& p2);
+
+	long double configurationEnergy(Atom* tab, int n);
 };
 
 #endif

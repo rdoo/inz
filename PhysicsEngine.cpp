@@ -12,6 +12,7 @@ void PhysicsEngine::timeStep(long double dt) {
 }
 
 void PhysicsEngine::step(Atom* tab, int n) {
+	currentEnergy = configurationEnergy(tab, n);
 	Vector force;
 	Vector len;
 	for (int i = 0; i < n; i++) {
@@ -112,4 +113,22 @@ Vector PhysicsEngine::lennarda(Atom& p1, Atom& p2) {
 					* (p1.position().z() - p2.position().z()));
 
 	return lenn;
+}
+
+long double PhysicsEngine::configurationEnergy(Atom* tab, int n) {
+	long double sigma = 2.2808e-10L;
+	long double epsilon = 8.31468e-20; // dla Ni
+	long double energy = 0.;
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++) { //TODO: wazne zeby poprawic
+			if (&tab[i] != &tab[j]) {
+				long double r = tab[i].position().distanceFromVector(
+						tab[j].position()); // dlugosc wektora laczacego punkty
+
+				energy += 4 * epsilon
+						* (powl(sigma / r, 12) - powl(sigma / r, 6));
+			}
+
+		}
+	return energy;
 }

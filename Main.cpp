@@ -24,8 +24,9 @@ enum programState {
 	reset,
 	save,
 	a2 = 20,
-	a4,
+	a5,
 	a10,
+	a15,
 	a20,
 	a50,
 	a100,
@@ -39,6 +40,7 @@ enum programState {
 };
 
 programState state = pause;
+programState lastState = pause;
 
 int main(int argc, char** argv) {
 	std::cout << "Hello inzynierko!" << std::endl;
@@ -72,11 +74,12 @@ int main(int argc, char** argv) {
 
 	int atomMenu = glutCreateMenu(processMenuEvents);
 	glutAddMenuEntry("2", 20);
-	glutAddMenuEntry("4", 21);
+	glutAddMenuEntry("5", 21);
 	glutAddMenuEntry("10", 22);
-	glutAddMenuEntry("20", 23);
-	glutAddMenuEntry("50", 24);
-	glutAddMenuEntry("100", 25);
+	glutAddMenuEntry("15", 23);
+	glutAddMenuEntry("20", 24);
+	glutAddMenuEntry("50", 25);
+	glutAddMenuEntry("100", 26);
 
 	int stepMenu = glutCreateMenu(processMenuEvents);
 	glutAddMenuEntry("1", 30);
@@ -134,9 +137,27 @@ void display() {
 		titleStr << "MONTE CARLO ALGORITHM";
 	}
 
-	energyStr << "Total energy: " << (double) algoEngine.currentEnergy
-			<< " J = " << (double) algoEngine.currentEnergy / elementaryCharge
-			<< " eV";
+	if (lastState == algorithm)
+		energyStr << "Total energy: " << (double) algoEngine.currentEnergy
+				<< " J = "
+				<< (double) algoEngine.currentEnergy / elementaryCharge
+				<< " eV";
+	else if (lastState == physics)
+		energyStr << "Total energy: " << (double) physxEngine.currentEnergy
+				<< " J = "
+				<< (double) physxEngine.currentEnergy / elementaryCharge
+				<< " eV";
+	else if (algoEngine.currentEnergy < physxEngine.currentEnergy)
+		energyStr << "Total energy: " << (double) algoEngine.currentEnergy
+				<< " J = "
+				<< (double) algoEngine.currentEnergy / elementaryCharge
+				<< " eV";
+	else
+		energyStr << "Total energy: " << (double) physxEngine.currentEnergy
+				<< " J = "
+				<< (double) physxEngine.currentEnergy / elementaryCharge
+				<< " eV";
+
 	stepStr << "Step number: " << algoEngine.steps;
 	lastStr << "Last change at step: " << algoEngine.lastChangeStep;
 
@@ -184,14 +205,17 @@ void update(int value) {
 
 	switch (state) {
 	case pause:
+		lastState = pause;
 		break;
 	case algorithm:
+		lastState = algorithm;
 		for (int i = 0; i < numberOfSteps; i++) {
 			algoEngine.step(atomTable, numberOfAtoms);
 		}
 		resetAtomsVelocities(atomTable, numberOfAtoms);
 		break;
 	case physics:
+		lastState = physics;
 		for (int i = 0; i < numberOfSteps; i++) {
 			physxEngine.step(atomTable, numberOfAtoms);
 		}
@@ -211,13 +235,18 @@ void update(int value) {
 		atomTable = new Atom[numberOfAtoms];
 		state = reset;
 		break;
-	case a4:
-		numberOfAtoms = 4;
+	case a5:
+		numberOfAtoms = 5;
 		atomTable = new Atom[numberOfAtoms];
 		state = reset;
 		break;
 	case a10:
 		numberOfAtoms = 10;
+		atomTable = new Atom[numberOfAtoms];
+		state = reset;
+		break;
+	case a15:
+		numberOfAtoms = 15;
 		atomTable = new Atom[numberOfAtoms];
 		state = reset;
 		break;
@@ -238,31 +267,31 @@ void update(int value) {
 		break;
 	case s1:
 		numberOfSteps = 1;
-		state = pause;
+		state = lastState;
 		break;
 	case s5:
 		numberOfSteps = 5;
-		state = pause;
+		state = lastState;
 		break;
 	case s10:
 		numberOfSteps = 10;
-		state = pause;
+		state = lastState;
 		break;
 	case s30:
 		numberOfSteps = 30;
-		state = pause;
+		state = lastState;
 		break;
 	case s50:
 		numberOfSteps = 50;
-		state = pause;
+		state = lastState;
 		break;
 	case s100:
 		numberOfSteps = 100;
-		state = pause;
+		state = lastState;
 		break;
 	case s1000:
 		numberOfSteps = 1000;
-		state = pause;
+		state = lastState;
 		break;
 	case save:
 		std::ofstream plik;
