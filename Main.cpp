@@ -19,6 +19,7 @@ double dynamicZoom = 1;
 
 bool axesEnabled = true;
 bool rotateEnabled = false;
+std::string readFile;
 
 enum programState {
 	pause,
@@ -42,10 +43,15 @@ enum programState {
 	s30,
 	s50,
 	s100,
-	s1000
+	s1000,
+	rr = 40,
+	r5,
+	r10,
+	r15,
+	r20
 };
 
-programState state = pause;
+programState state = rr;
 programState lastState = pause;
 
 int main(int argc, char** argv) {
@@ -96,6 +102,13 @@ int main(int argc, char** argv) {
 	glutAddMenuEntry("100", 35);
 	glutAddMenuEntry("1000", 36);
 
+	int readMenu = glutCreateMenu(processMenuEvents);
+	glutAddMenuEntry("Random", 40);
+	glutAddMenuEntry("5", 41);
+	glutAddMenuEntry("10", 42);
+	glutAddMenuEntry("15", 43);
+	glutAddMenuEntry("20", 44);
+
 	glutCreateMenu(processMenuEvents);
 	glutAddMenuEntry("Pause (Space Bar)", 0);
 	glutAddMenuEntry("Monte Carlo (Enter)", 1);
@@ -104,7 +117,8 @@ int main(int argc, char** argv) {
 	glutAddMenuEntry("Save to file", 4);
 	glutAddMenuEntry("Enable/disable axes", 5);
 	glutAddMenuEntry("Enable/disable rotate", 6);
-	glutAddMenuEntry("Read", 7);
+	//glutAddMenuEntry("Read", 7);
+	glutAddSubMenu("Read from file", readMenu);
 	glutAddSubMenu("Number of atoms", atomMenu);
 	glutAddSubMenu("Number of steps per frame", stepMenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
@@ -209,8 +223,8 @@ void update(int value) {
 	handleKeyboard();
 	camera.mouseMove();
 
-	if ((algoEngine.steps - algoEngine.lastChangeStep) > 10000)
-		state = pause;
+	//if ((algoEngine.steps - algoEngine.lastChangeStep) > 10000)
+		//state = pause;
 
 	if (rotateEnabled)
 		camera.rotateView(0.001);
@@ -233,9 +247,9 @@ void update(int value) {
 		}
 		break;
 	case reset:
-		//generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
-		generateAtomsInCube(atomTable, numberOfAtoms, diameter / 2., atomMass,
-				3, 3);
+		generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
+//		generateAtomsInCube(atomTable, numberOfAtoms, diameter / 2., atomMass,
+//				3, 3);
 		algoEngine.currentEnergy = 0.;
 		algoEngine.steps = 0;
 		algoEngine.lastChangeStep = 0;
@@ -315,7 +329,7 @@ void update(int value) {
 		break;
 	case read: {
 		std::ifstream reader;
-		reader.open("25-198221.txt");
+		reader.open(readFile.c_str());
 		int ratoms, rsteps, rlastchange;
 		long double renergy;
 		std::string line;
@@ -331,7 +345,7 @@ void update(int value) {
 
 		algoEngine.steps = rsteps;
 		algoEngine.lastChangeStep = rlastchange;
-		algoEngine.currentEnergy = renergy;
+		algoEngine.currentEnergy = renergy * elementaryCharge;
 		numberOfAtoms = ratoms;
 		atomTable = new Atom[numberOfAtoms]; //TODO :zmienic
 		Atom atom;
@@ -352,6 +366,26 @@ void update(int value) {
 	}
 
 		state = pause;
+		break;
+	case rr:
+		readFile = "random.txt";
+		state = read;
+		break;
+	case r5:
+		readFile = "5.txt";
+		state = read;
+		break;
+	case r10:
+		readFile = "10.txt";
+		state = read;
+		break;
+	case r15:
+		readFile = "15.txt";
+		state = read;
+		break;
+	case r20:
+		readFile = "20.txt";
+		state = read;
 		break;
 	case save:
 		std::ofstream plik;

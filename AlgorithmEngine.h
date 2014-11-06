@@ -2,6 +2,7 @@
 #define ALGORITHMENGINE_H
 
 #include "Atom.h"
+#include <cmath>
 
 const long double boltzmannConstant = 1.3806488e-23;
 
@@ -23,10 +24,11 @@ class AlgorithmEngine {
 	long double e = -3.315572;
 	long double f = -6.826925;*/
 	//dla ni
-	long double a = 2.312051e-10 * elementaryCharge;
 	long double b = 10.115240;
-	long double c = -3.708160e-10 * elementaryCharge;
+	long double a = 2.312051*powl(1.e-10 * elementaryCharge, 1/b);
 	long double d = 2.633777;
+	long double c = -3.708160*powl(1.e-10 * elementaryCharge, d);
+
 	long double e = 3.144080;
 	long double f = -1.212423;
 

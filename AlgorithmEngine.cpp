@@ -28,7 +28,7 @@ long double AlgorithmEngine::configurationEnergy2(Atom* tab, int n) {
 				long double r = tab[i].position().distanceFromVector(
 						tab[j].position()); // dlugosc wektora laczacego punkty
 
-			energy += powl(a / r, b) + c / powl( r, d) * cosl(e * r + f);
+			energy += powl(a / r, b) + c / powl(r, d) * cosl(e * r + f);
 			//std::cout << (double)(c / powl( r, d)) << std::endl;
 				}
 
