@@ -17,12 +17,17 @@ long double atomMass = 4.480389e-26; // Al
 double staticZoom = 100000000000;
 double dynamicZoom = 1;
 
+bool axesEnabled = true;
+bool rotateEnabled = false;
+
 enum programState {
 	pause,
 	algorithm,
 	physics,
 	reset,
 	save,
+	axes,
+	rotate,
 	a2 = 20,
 	a5,
 	a10,
@@ -93,9 +98,11 @@ int main(int argc, char** argv) {
 	glutCreateMenu(processMenuEvents);
 	glutAddMenuEntry("Pause (Space Bar)", 0);
 	glutAddMenuEntry("Monte Carlo (Enter)", 1);
-	glutAddMenuEntry("Physical simulation", 2);
+	glutAddMenuEntry("System evolution over time", 2);
 	glutAddMenuEntry("Reset", 3);
 	glutAddMenuEntry("Save to file", 4);
+	glutAddMenuEntry("Enable/disable axes", 5);
+	glutAddMenuEntry("Enable/disable rotate", 6);
 	glutAddSubMenu("Number of atoms", atomMenu);
 	glutAddSubMenu("Number of steps per frame", stepMenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
@@ -104,7 +111,7 @@ int main(int argc, char** argv) {
 }
 
 void display() {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f); // Set background color to black and opaque
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the color buffer
 
 	glMatrixMode(GL_MODELVIEW);
@@ -116,52 +123,42 @@ void display() {
 			camera.mView.x(), camera.mView.y(), camera.mView.z(),
 			camera.mUp.x(), camera.mUp.y(), camera.mUp.z());
 
-	//glPushMatrix();
-
-	drawAxes();
+	if (axesEnabled)
+		drawAxes();
 
 	for (int i = 0; i < numberOfAtoms; i++) {
 		displayAtom(i);
 	}
 
-	//glPopMatrix();
-	//writeStringIn3D("xdsfsdsdds", 0, -5e-10, 5e-10);
-
 	std::ostringstream titleStr, energyStr, stepStr, lastStr, workStr;
 
 	workStr << "[WORK IN PROGRESS]";
 
-	if (state == pause) { // TODO: do poprawy
-		titleStr << "PAUSED";
+	if (state == algorithm) { // TODO: do poprawy
+		titleStr << "MONTE CARLO ALGORITHM";
 	} else if (state == physics) {
 		std::ostringstream timeStr;
-		titleStr << "PHYSICAL SIMULATION";
+		titleStr << "SYSTEM EVOLUTION OVER TIME";
 		timeStr << "Virtual simulation time in ns: "
 				<< (double) physxEngine.timeFromBeginning() * 1.e9 << std::endl;
 
 		writeString(timeStr.str(), -1., .75);
-	} else {
-		titleStr << "MONTE CARLO ALGORITHM";
 	}
 
 	if (lastState == algorithm)
-		energyStr << "Total energy: " << (double) algoEngine.currentEnergy
-				<< " J = "
+		energyStr << "Total energy: "
 				<< (double) algoEngine.currentEnergy / elementaryCharge
 				<< " eV";
 	else if (lastState == physics)
-		energyStr << "Total energy: " << (double) physxEngine.currentEnergy
-				<< " J = "
+		energyStr << "Total energy: "
 				<< (double) physxEngine.currentEnergy / elementaryCharge
 				<< " eV";
 	else if (algoEngine.currentEnergy < physxEngine.currentEnergy)
-		energyStr << "Total energy: " << (double) algoEngine.currentEnergy
-				<< " J = "
+		energyStr << "Total energy: "
 				<< (double) algoEngine.currentEnergy / elementaryCharge
 				<< " eV";
 	else
-		energyStr << "Total energy: " << (double) physxEngine.currentEnergy
-				<< " J = "
+		energyStr << "Total energy: "
 				<< (double) physxEngine.currentEnergy / elementaryCharge
 				<< " eV";
 
@@ -210,6 +207,12 @@ void update(int value) {
 	handleKeyboard();
 	camera.mouseMove();
 
+	if ((algoEngine.steps - algoEngine.lastChangeStep) > 10000)
+		state = pause;
+
+	if (rotateEnabled)
+		camera.rotateView(0.001);
+
 	switch (state) {
 	case pause:
 		lastState = pause;
@@ -230,7 +233,7 @@ void update(int value) {
 	case reset:
 		//generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
 		generateAtomsInCube(atomTable, numberOfAtoms, diameter / 2., atomMass,
-				10, 10);
+				3, 3);
 		algoEngine.currentEnergy = 0.;
 		algoEngine.steps = 0;
 		algoEngine.lastChangeStep = 0;
@@ -300,14 +303,23 @@ void update(int value) {
 		numberOfSteps = 1000;
 		state = lastState;
 		break;
+	case axes:
+		axesEnabled = axesEnabled ? false : true;
+		state = lastState;
+		break;
+	case rotate:
+		rotateEnabled = rotateEnabled ? false : true;
+		state = lastState;
+		break;
 	case save:
 		std::ofstream plik;
 		std::ostringstream name, comment;
 		name << numberOfAtoms << "-" << algoEngine.steps << ".txt";
 		comment << "# " << numberOfAtoms << " atoms" << std::endl << "# "
 				<< algoEngine.steps << " steps" << std::endl << "# "
-				<< (double) algoEngine.currentEnergy / elementaryCharge << " eV"
-				<< std::endl;
+				<< algoEngine.lastChangeStep << " last change step" << std::endl
+				<< "# " << (double) algoEngine.currentEnergy / elementaryCharge
+				<< " eV" << std::endl;
 		plik.open(name.str().c_str());
 		plik << comment.str();
 		for (int i = 0; i < numberOfAtoms; i++)
