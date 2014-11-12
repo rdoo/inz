@@ -28,37 +28,44 @@ long double AlgorithmEngine::configurationEnergy2(Atom* tab, int n) {
 				long double r = tab[i].position().distanceFromVector(
 						tab[j].position()); // dlugosc wektora laczacego punkty
 
-			energy += powl(a / r, b) + c / powl(r, d) * cosl(e * r + f);
-			//std::cout << (double)(c / powl( r, d)) << std::endl;
-				}
-
+				energy += powl(a / r, b) + powl(c / r, d) * cosl(e * r + f);
+				std::cout << (double) powl(a / r, b) << " "
+						<< (double) powl(c / r, d) << " "
+						<< (double) cosl(e * r + f) << std::endl;
+				//std::cout << (double)(c / powl( r, d)) << std::endl;
 			}
-		return energy;
-	}
-	void AlgorithmEngine::step(Atom* tab, int n) {
-		currentEnergy = configurationEnergy(tab, n);
-		//std::cout << "old energy: " << currentEnergy << std::endl;
-		int i = rand() % n;
-		long double dx = (rand() % 10001 / 10000. - 0.5) * m_delta;
-		long double dy = (rand() % 10001 / 10000. - 0.5) * m_delta;
-		long double dz = (rand() % 10001 / 10000. - 0.5) * m_delta;
-		tab[i].position() = tab[i].position() + Vector(dx, dy, dz);
 
-		long double newEnergy = configurationEnergy(tab, n);
-		//std::cout << "newEnergy: " << newEnergy << std::endl;
+		}
+	return energy;
+}
+void AlgorithmEngine::step(Atom* tab, int n) {
+	currentEnergy = configurationEnergy(tab, n);
+	//std::cout << "old energy: " << currentEnergy << std::endl;
+	int i = rand() % n;
+	long double dx = (rand() % 10001 / 10000. - 0.5) * m_delta;
+	long double dy = (rand() % 10001 / 10000. - 0.5) * m_delta;
+	long double dz = (rand() % 10001 / 10000. - 0.5) * m_delta;
+	tab[i].position() = tab[i].position() + Vector(dx, dy, dz);
 
-		steps++;
+	long double newEnergy = configurationEnergy(tab, n);
+	//std::cout << "newEnergy: " << newEnergy << std::endl;
 
-		if (newEnergy > currentEnergy) {
-			long double boltzmann = expl(
-					-(newEnergy - currentEnergy) / boltzmannConstant
-							/ m_temperature);
-			//std::cout << std::setprecision(12) << "boltz " << (double) boltzmann
-			//		<< std::endl;
-			//if (rand() % 10001 / 10000. > 0./*boltzmann*/) {
+	steps++;
+
+	if (newEnergy > currentEnergy) {
+		long double boltzmann = expl(
+				-(newEnergy - currentEnergy) / boltzmannConstant / temp);
+		//std::cout << (double)(newEnergy - currentEnergy) << std::endl;
+		//std::cout << std::setprecision(12) << "boltz " << (double) boltzmann
+				//<< std::endl;
+		if ((rand() % 10001 / 10000. > boltzmann) || temp < 1) {
 			//std::cout << "cofamy" << std::endl;
 			tab[i].position() = tab[i].position() - Vector(dx, dy, dz);
-			//}
-		} else
-			lastChangeStep = steps; //TODO: do zmiany
-	}
+		}
+	} else
+		lastChangeStep = steps; //TODO: do zmiany
+	if (temp >= 1)
+		temp = temp * expl(-0.02);
+
+	//std::cout << "temp: " << (double) temp << std::endl;
+}

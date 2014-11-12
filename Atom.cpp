@@ -53,23 +53,23 @@ void generateAtomsInCube(Atom* tab, int numberOfAtoms, long double diameter,
 	Atom atom;
 	Vector position;
 	int atoms = 0;
-	for (int i = 0;; i++) {
-		std::cout << "dodane" << atoms << " " << numberOfAtoms << std::endl;
+	//for (int i = 0;; i++) {
+		//std::cout << "dodane" << atoms << " " << numberOfAtoms << std::endl;
 		for (int k = 0; k < x; k++) {
 			for (int j = 0; j < y; j++) {
 				position = Vector(((-x / 2) + k) * diameter,
-						((-y / 2) + j) * diameter, i * diameter);
+						((-y / 2) + j) * diameter, 0 * diameter);
 				atom = Atom(mass, position, Vector(0., 0., 0.));
 				tab[atoms] = atom;
 				atoms++;
-				std::cout << "+1" << std::endl;
-				std::cout << position << std::endl;
+				//std::cout << "+1" << std::endl;
+				//std::cout << position << std::endl;
 				if (atoms == numberOfAtoms)
 					return;
 
 			}
 		}
-	}
+	//}
 }
 
 void resetAtomsVelocities(Atom* tab, int numberOfAtoms) {

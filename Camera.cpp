@@ -14,7 +14,7 @@ void Camera::positionCamera(float pos_x, float pos_y, float pos_z, float view_x,
 }
 
 void Camera::moveCamera(float speed) {
-	double spowolnienie = 1000000000.;
+	double spowolnienie = 10000000000.;
 	Vector vector = mView - mPos;	// Get the view vector
 
 	// forward positive cameraspeed and backward negative -cameraspeed.
@@ -32,7 +32,7 @@ void Camera::rotateView(float speed) {
 }
 
 void Camera::strafeCamera(float speed) {
-	double spowolnienie = 1000000000.;
+	double spowolnienie = 10000000000.;
 	Vector vector = mView - mPos;	// Get the view vector
 	Vector orthoVector;              // Orthogonal vector for the view vector
 

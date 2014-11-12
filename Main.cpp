@@ -8,8 +8,8 @@ int height = 640;
 
 Camera camera(width, height);
 
-int numberOfSteps = 100;
-int numberOfAtoms = 25;
+int numberOfSteps = 1;
+int numberOfAtoms = 20;
 Atom* atomTable = new Atom[numberOfAtoms];
 long double diameter = 6e-10L;
 long double atomMass = 4.480389e-26; // Al
@@ -20,6 +20,7 @@ double dynamicZoom = 1;
 bool axesEnabled = true;
 bool rotateEnabled = false;
 std::string readFile;
+int rows = 5, columns = 4;
 
 enum programState {
 	pause,
@@ -48,7 +49,8 @@ enum programState {
 	r5,
 	r10,
 	r15,
-	r20
+	r20,
+	r2d
 };
 
 programState state = rr;
@@ -108,6 +110,7 @@ int main(int argc, char** argv) {
 	glutAddMenuEntry("10", 42);
 	glutAddMenuEntry("15", 43);
 	glutAddMenuEntry("20", 44);
+	glutAddMenuEntry("2D", 45);
 
 	glutCreateMenu(processMenuEvents);
 	glutAddMenuEntry("Pause (Space Bar)", 0);
@@ -148,7 +151,7 @@ void display() {
 
 	std::ostringstream titleStr, energyStr, stepStr, lastStr, workStr;
 
-	workStr << "[WORK IN PROGRESS]";
+	//workStr << "[WORK IN PROGRESS]";
 
 	if (state == algorithm) { // TODO: do poprawy
 		titleStr << "MONTE CARLO ALGORITHM";
@@ -223,9 +226,6 @@ void update(int value) {
 	handleKeyboard();
 	camera.mouseMove();
 
-	//if ((algoEngine.steps - algoEngine.lastChangeStep) > 10000)
-		//state = pause;
-
 	if (rotateEnabled)
 		camera.rotateView(0.001);
 
@@ -247,48 +247,63 @@ void update(int value) {
 		}
 		break;
 	case reset:
-		generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
-//		generateAtomsInCube(atomTable, numberOfAtoms, diameter / 2., atomMass,
-//				3, 3);
-		algoEngine.currentEnergy = 0.;
+		//generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
+		generateAtomsInCube(atomTable, numberOfAtoms, 2.5e-10, atomMass,
+				rows, columns);
+		algoEngine.currentEnergy = algoEngine.configurationEnergy(atomTable, numberOfAtoms);
 		algoEngine.steps = 0;
 		algoEngine.lastChangeStep = 0;
+		algoEngine.temp = 1e12;
 		physxEngine.resetTime();
 		state = pause;
 		break;
 	case a2:
 		numberOfAtoms = 2;
 		atomTable = new Atom[numberOfAtoms];
+		rows = 2;
+		columns = 1;
 		state = reset;
 		break;
 	case a5:
 		numberOfAtoms = 5;
 		atomTable = new Atom[numberOfAtoms];
+		rows = 3;
+		columns = 2;
 		state = reset;
 		break;
 	case a10:
 		numberOfAtoms = 10;
 		atomTable = new Atom[numberOfAtoms];
+		rows = 4;
+		columns = 3;
 		state = reset;
 		break;
 	case a15:
 		numberOfAtoms = 15;
 		atomTable = new Atom[numberOfAtoms];
+		rows = 4;
+		columns = 4;
 		state = reset;
 		break;
 	case a20:
 		numberOfAtoms = 20;
 		atomTable = new Atom[numberOfAtoms];
+		rows = 5;
+		columns = 4;
 		state = reset;
 		break;
 	case a50:
 		numberOfAtoms = 50;
 		atomTable = new Atom[numberOfAtoms];
+		rows = 8;
+		columns = 7;
 		state = reset;
 		break;
 	case a100:
 		numberOfAtoms = 100;
 		atomTable = new Atom[numberOfAtoms];
+		rows = 10;
+		columns = 10;
 		state = reset;
 		break;
 	case s1:
@@ -387,6 +402,10 @@ void update(int value) {
 		readFile = "20.txt";
 		state = read;
 		break;
+	case r2d:
+		readFile = "2d.txt";
+		state = read;
+		break;
 	case save:
 		std::ofstream plik;
 		std::ostringstream name, comment;
@@ -404,6 +423,9 @@ void update(int value) {
 		state = pause;
 		break;
 	}
+
+	if ((algoEngine.steps - algoEngine.lastChangeStep) > 10000)
+		state = pause;
 
 	//std::cout << atomTable[0].position() << "\t\t" << atomTable[1].position()
 	//		<< std::endl;
@@ -492,7 +514,7 @@ void writeStringIn3D(std::string str, double x, double y, double z) {
 
 void drawAxes() {
 	double ang = 1e-10;
-	int halfLength = 6;
+	int halfLength = 7;
 	double off = 0.2;
 
 	glDisable(GL_LIGHTING);
