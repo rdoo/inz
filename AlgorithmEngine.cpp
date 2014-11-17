@@ -7,7 +7,7 @@
 long double AlgorithmEngine::configurationEnergy(Atom* tab, int n) {
 	long double energy = 0.;
 	for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++) { //TODO: wazne zeby poprawic
+		for (int j = 0; j < n; j++) {
 			if (&tab[i] != &tab[j]) {
 				long double r = tab[i].position().distanceFromVector(
 						tab[j].position()); // dlugosc wektora laczacego punkty
@@ -40,7 +40,7 @@ long double AlgorithmEngine::configurationEnergy2(Atom* tab, int n) {
 }
 void AlgorithmEngine::step(Atom* tab, int n) {
 	currentEnergy = configurationEnergy(tab, n);
-	//std::cout << "old energy: " << currentEnergy << std::endl;
+
 	int i = rand() % n;
 	long double dx = (rand() % 10001 / 10000. - 0.5) * m_delta;
 	long double dy = (rand() % 10001 / 10000. - 0.5) * m_delta;
@@ -48,24 +48,17 @@ void AlgorithmEngine::step(Atom* tab, int n) {
 	tab[i].position() = tab[i].position() + Vector(dx, dy, dz);
 
 	long double newEnergy = configurationEnergy(tab, n);
-	//std::cout << "newEnergy: " << newEnergy << std::endl;
-
 	steps++;
 
 	if (newEnergy > currentEnergy) {
 		long double boltzmann = expl(
 				-(newEnergy - currentEnergy) / boltzmannConstant / temp);
-		//std::cout << (double)(newEnergy - currentEnergy) << std::endl;
-		//std::cout << std::setprecision(12) << "boltz " << (double) boltzmann
-				//<< std::endl;
 		if ((rand() % 10001 / 10000. > boltzmann) || temp < 1) {
-			//std::cout << "cofamy" << std::endl;
 			tab[i].position() = tab[i].position() - Vector(dx, dy, dz);
 		}
 	} else
-		lastChangeStep = steps; //TODO: do zmiany
+		lastChangeStep = steps;
 	if (temp >= 1)
 		temp = temp * expl(-0.02);
 
-	//std::cout << "temp: " << (double) temp << std::endl;
 }

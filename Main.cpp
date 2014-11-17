@@ -57,7 +57,6 @@ programState state = rr;
 programState lastState = pause;
 
 int main(int argc, char** argv) {
-	std::cout << "Hello inzynierko!" << std::endl;
 	std::cout << "Initial number of atoms: " << numberOfAtoms << std::endl;
 	std::cout << "Initial steps per frame: " << numberOfSteps << std::endl;
 	srand(time(NULL));
