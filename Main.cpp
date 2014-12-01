@@ -9,7 +9,7 @@ int height = 640;
 Camera camera(width, height);
 
 int numberOfSteps = 1;
-int numberOfAtoms = 20;
+int numberOfAtoms = 100;
 Atom* atomTable = new Atom[numberOfAtoms];
 long double diameter = 6e-10L;
 long double atomMass = 4.480389e-26; // Al
@@ -53,7 +53,7 @@ enum programState {
 	r2d
 };
 
-programState state = rr;
+programState state = pause;
 programState lastState = pause;
 
 int main(int argc, char** argv) {
