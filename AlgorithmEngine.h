@@ -25,9 +25,9 @@ class AlgorithmEngine {
 	long double f = -6.826925;*/
 	//dla ni
 	long double b = 10.115240;
-	long double a = 2.312051*powl(1.e-10 * elementaryCharge, 1/b);
+	long double a = 2.312051;//*powl(1.e-10 * elementaryCharge, 1/b);
 	long double d = 2.633777;
-	long double c = 3.708160*powl(1.e-10 * elementaryCharge, 1/d); // TODO: tu minus!!!!?????
+	long double c = -3.708160;//*powl(1.e-10 * elementaryCharge, 1/d); // TODO: tu minus!!!!?????
 
 	long double e = 3.144080;
 	long double f = -1.212423;

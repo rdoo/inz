@@ -9,7 +9,7 @@ int height = 640;
 Camera camera(width, height);
 
 int numberOfSteps = 1;
-int numberOfAtoms = 100;
+int numberOfAtoms = 10;
 Atom* atomTable = new Atom[numberOfAtoms];
 long double diameter = 6e-10L;
 long double atomMass = 4.480389e-26; // Al
@@ -129,7 +129,7 @@ int main(int argc, char** argv) {
 }
 
 void display() {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set background color to black and opaque
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the color buffer
 
 	glMatrixMode(GL_MODELVIEW);
@@ -246,9 +246,9 @@ void update(int value) {
 		}
 		break;
 	case reset:
-		//generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
-		generateAtomsInCube(atomTable, numberOfAtoms, 2.5e-10, atomMass,
-				rows, columns);
+		generateAtoms(atomTable, numberOfAtoms, diameter, atomMass);
+		//generateAtomsInCube(atomTable, numberOfAtoms, 2.5e-10, atomMass,
+		//		rows, columns);
 		algoEngine.currentEnergy = algoEngine.configurationEnergy(atomTable, numberOfAtoms);
 		algoEngine.steps = 0;
 		algoEngine.lastChangeStep = 0;
@@ -487,7 +487,7 @@ void writeString(std::string str, double x, double y) {
 	glDisable(GL_LIGHTING);
 
 	glRasterPos2f(x, y); // center of screen. (-1,0) is center left.
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 	const char * p = str.c_str();
 	do
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *p);
@@ -504,7 +504,7 @@ void writeString(std::string str, double x, double y) {
 
 void writeStringIn3D(std::string str, double x, double y, double z) {
 	glRasterPos3f(x, y, z);
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
 	const char * p = str.c_str();
 	do
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, *p);
@@ -517,7 +517,7 @@ void drawAxes() {
 	double off = 0.2;
 
 	glDisable(GL_LIGHTING);
-	glColor3f(1, 1, 1);
+	glColor3f(0, 0, 0);
 
 	glBegin(GL_LINES);
 	glVertex3f(-halfLength * ang, -halfLength * ang, halfLength * ang);

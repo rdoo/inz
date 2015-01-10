@@ -23,16 +23,16 @@ long double AlgorithmEngine::configurationEnergy2(Atom* tab, int n) {
 			long double r = tab[i].position().distanceFromVector(
 					tab[j].position()); // dlugosc wektora laczacego punkty
 
-			energy += powl(a / r, b) + powl(c / r, d) * cosl(e * r + f);
-			std::cout << (double) powl(a / r, b) << " "
-					<< (double) powl(c / r, d) << " "
-					<< (double) cosl(e * r + f) << std::endl;
+			energy += powl(a / r / 1e10, b) + c / powl(r * 1e10, d) * cosl(e * r * 1e10 + f);
+			std::cout << (double) powl(a / r / 1e10, b) << " "
+					<< (double) (c / powl(r * 1e10, d)) << " "
+					<< (double) cosl(e * r * 1e10 + f) << std::endl;
 			//std::cout << (double)(c / powl( r, d)) << std::endl;
 		}
-	return energy;
+	return energy * elementaryCharge;
 }
 void AlgorithmEngine::step(Atom* tab, int n) {
-	currentEnergy = configurationEnergy(tab, n);
+	currentEnergy = configurationEnergy2(tab, n);
 
 	int i = rand() % n;
 	long double dx = (rand() % 10001 / 10000. - 0.5) * m_delta;
@@ -40,7 +40,7 @@ void AlgorithmEngine::step(Atom* tab, int n) {
 	long double dz = (rand() % 10001 / 10000. - 0.5) * m_delta;
 	tab[i].position() = tab[i].position() + Vector(dx, dy, dz);
 
-	long double newEnergy = configurationEnergy(tab, n);
+	long double newEnergy = configurationEnergy2(tab, n);
 	steps++;
 
 	if (newEnergy > currentEnergy) {
