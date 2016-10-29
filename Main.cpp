@@ -8,10 +8,10 @@ int height = 640;
 
 Camera camera(width, height);
 
-int numberOfSteps = 1;
-int numberOfAtoms = 10;
+int numberOfSteps = 500;
+int numberOfAtoms = 35;
 Atom* atomTable = new Atom[numberOfAtoms];
-long double diameter = 6e-10L;
+long double diameter = 6e-10L;//6e-10L;
 long double atomMass = 4.480389e-26; // Al
 
 double staticZoom = 100000000000;
@@ -21,6 +21,8 @@ bool axesEnabled = true;
 bool rotateEnabled = false;
 std::string readFile;
 int rows = 5, columns = 4;
+
+std::ofstream pliku, pliku2;
 
 enum programState {
 	pause,
@@ -68,7 +70,7 @@ int main(int argc, char** argv) {
 	glutCreateWindow("Klaster atomowy"); // Create a window with the given title
 
 	float mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	float mat_shininess[] = { 50.0 };
+	float mat_shininess[] = { 90.0 };
 	float light_position[] = { 1., 1., 1., 0.0 };
 
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -125,7 +127,21 @@ int main(int argc, char** argv) {
 	glutAddSubMenu("Number of steps per frame", stepMenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
+//pliku.open("Energy.txt");
+/*
+pliku2.open("1500.txt");
+
+double tempu = 1500;
+
+for(int i=1; i <=20000;i++){
+	pliku2 << i << " " << tempu  << std::endl;
+	tempu = tempu * exp(-0.0002);
+}
+
+pliku2.close();
+*/
 	glutMainLoop();           // Enter the infinitely event-processing loop
+	//pliku.close();
 }
 
 void display() {
@@ -194,7 +210,7 @@ void display() {
 }
 
 void displayAtom(int atomNumber) {
-	glColor3f(224 / 255.0f, 224 / 255.0f, 200 / 255.0f);
+	glColor3f(184 / 255.0f, 184 / 255.0f, 200 / 182.0f);
 	glPushMatrix();
 	glTranslatef(atomTable[atomNumber].position().x(),
 			atomTable[atomNumber].position().y(),
@@ -237,6 +253,8 @@ void update(int value) {
 		for (int i = 0; i < numberOfSteps; i++) {
 			algoEngine.step(atomTable, numberOfAtoms);
 		}
+		//pliku << algoEngine.steps << " " << (double) (algoEngine.currentEnergy / elementaryCharge / numberOfAtoms) << std::endl;
+
 		resetAtomsVelocities(atomTable, numberOfAtoms);
 		break;
 	case physics:
@@ -252,7 +270,7 @@ void update(int value) {
 		algoEngine.currentEnergy = algoEngine.configurationEnergy(atomTable, numberOfAtoms);
 		algoEngine.steps = 0;
 		algoEngine.lastChangeStep = 0;
-		algoEngine.temp = 1e12;
+		algoEngine.temp = 750;
 		physxEngine.resetTime();
 		state = pause;
 		break;
@@ -408,6 +426,20 @@ void update(int value) {
 	case save:
 		std::ofstream plik;
 		std::ostringstream name, comment;
+		int licznika = 0;
+		double suum = 0;
+		for (int f=0; f < numberOfAtoms; f++)
+			for (int k=0; k < numberOfAtoms; k++){
+				double odleglosc = atomTable[f].position().distanceFromVector(atomTable[k].position());
+				if (odleglosc > 2e-10 && odleglosc < 3e-10){
+					std::cout << odleglosc << std::endl;
+					licznika++;
+					suum += odleglosc;
+				}
+			}
+
+		std::cout << "liczba sasiadow: "<< licznika << " suma: " << suum << " srednia: " << suum/licznika << std::endl;
+
 		name << numberOfAtoms << "-" << algoEngine.steps << ".txt";
 		comment << "# " << numberOfAtoms << " atoms" << std::endl << "# "
 				<< algoEngine.steps << " steps" << std::endl << "# "
@@ -423,8 +455,8 @@ void update(int value) {
 		break;
 	}
 
-	if ((algoEngine.steps - algoEngine.lastChangeStep) > 10000)
-		state = pause;
+	//if ((algoEngine.steps - algoEngine.lastChangeStep) > 20000)
+	//	state = pause;
 
 	//std::cout << atomTable[0].position() << "\t\t" << atomTable[1].position()
 	//		<< std::endl;
@@ -463,10 +495,10 @@ void handleKeyboard() {
 		camera.strafeCamera(-CAMERASPEED);
 	} else if ((GetKeyState(VK_RIGHT) & 0x80) || (GetKeyState('D') & 0x80)) {
 		camera.strafeCamera(CAMERASPEED);
-	} else if ((GetKeyState(VK_SPACE) & 0x80)) {
+	/*} else if ((GetKeyState(VK_SPACE) & 0x80)) {
 		state = pause;
 	} else if ((GetKeyState(VK_RETURN) & 0x80)) {
-		state = algorithm;
+		state = algorithm;*/
 	}
 }
 

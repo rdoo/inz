@@ -24,15 +24,11 @@ long double AlgorithmEngine::configurationEnergy2(Atom* tab, int n) {
 					tab[j].position()); // dlugosc wektora laczacego punkty
 
 			energy += powl(a / r / 1e10, b) + c / powl(r * 1e10, d) * cosl(e * r * 1e10 + f);
-			std::cout << (double) powl(a / r / 1e10, b) << " "
-					<< (double) (c / powl(r * 1e10, d)) << " "
-					<< (double) cosl(e * r * 1e10 + f) << std::endl;
-			//std::cout << (double)(c / powl( r, d)) << std::endl;
 		}
 	return energy * elementaryCharge;
 }
 void AlgorithmEngine::step(Atom* tab, int n) {
-	currentEnergy = configurationEnergy2(tab, n);
+	currentEnergy = configurationEnergy(tab, n);
 
 	int i = rand() % n;
 	long double dx = (rand() % 10001 / 10000. - 0.5) * m_delta;
@@ -40,17 +36,21 @@ void AlgorithmEngine::step(Atom* tab, int n) {
 	long double dz = (rand() % 10001 / 10000. - 0.5) * m_delta;
 	tab[i].position() = tab[i].position() + Vector(dx, dy, dz);
 
-	long double newEnergy = configurationEnergy2(tab, n);
+	long double newEnergy = configurationEnergy(tab, n);
 	steps++;
 
 	if (newEnergy > currentEnergy) {
-		/*long double boltzmann = expl(
+		long double boltzmann = expl(
 		 -(newEnergy - currentEnergy) / boltzmannConstant / temp);
-		 if ((rand() % 10001 / 10000. > boltzmann) || temp < 1)*/
+		//std::cout <<"energia: " << (double)(-(newEnergy - currentEnergy)) << std::endl;
+		//std::cout << (double) boltzmann << std::endl;
+		 if ((rand() % 10001 / 10000. > boltzmann) || temp < 1)
 		tab[i].position() = tab[i].position() - Vector(dx, dy, dz);
 	} else
 		lastChangeStep = steps;
-	if (temp >= 1)
-		temp = temp * expl(-0.02);
+	if (temp >= 0.1)
+		temp = temp * expl(-0.0002);
+
+	//std::cout <<"temp: "<< (double)temp <<std::endl;
 
 }

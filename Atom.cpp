@@ -48,6 +48,18 @@ void generateAtoms(Atom* tab, int numberOfAtoms, long double diameter,
 	}
 }
 
+void generateAtoms2D(Atom* tab, int numberOfAtoms, long double diameter,
+		long double mass) {
+	Atom atom;
+	Vector position;
+	for (int i = 0; i < numberOfAtoms; i++) {
+		position = Vector((rand() % 10001 / 10000. - 0.5) * diameter,
+				(rand() % 10001 / 10000. - 0.5) * diameter, 0);
+		atom = Atom(mass, position, Vector(0., 0., 0.));
+		tab[i] = atom;
+	}
+}
+
 void generateAtomsInCube(Atom* tab, int numberOfAtoms, long double diameter,
 		long double mass, int x, int y) {
 	Atom atom;

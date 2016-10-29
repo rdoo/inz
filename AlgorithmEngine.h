@@ -2,13 +2,14 @@
 #define ALGORITHMENGINE_H
 
 #include "Atom.h"
+#include <iostream>
 #include <cmath>
 
 const long double boltzmannConstant = 1.3806488e-23;
 
 class AlgorithmEngine {
 	//long double m_temperature = 10.; //!< temperatura
-	long double m_delta = 0.5e-10; //!< krawedz szescianu nowego polozenia
+	long double m_delta = 0.5e-10*8; //!< krawedz szescianu nowego polozenia
 	//long double sigma = 2.85e-10L;
 	//long double epsilon = 8.01088e-20; // dla Al
 
@@ -36,7 +37,7 @@ public:
 	long double currentEnergy;
 	int steps = 0;
 	int lastChangeStep = 0;
-	long double temp = 1e12;
+	long double temp = 750;
 	long double configurationEnergy(Atom* tab, int n);
 	long double configurationEnergy2(Atom* tab, int n);
 	void step(Atom* tab, int n);
